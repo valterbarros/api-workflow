@@ -1,6 +1,9 @@
 package utils
 
 import (
+	"encoding/json"
+	"io"
+	"log"
 	"os"
 	"strings"
 )
@@ -38,4 +41,21 @@ func GetFileData(file string) string {
 
 func Capitalize(s string) string {
 	return strings.ToUpper(s[:1]) + s[1:]
+}
+
+func SetEnvFromFile() {
+	data := GetFileData("../.env")
+	vars := strings.SplitSeq(data, "\n")
+	for variable := range vars {
+		spt := strings.Split(variable, "=")
+		os.Setenv(spt[0], spt[1])
+	}
+}
+
+func DecodeJson(data io.Reader, variable any) {
+	decoder := json.NewDecoder(data)
+
+	if err := decoder.Decode(&variable); err != nil {
+		log.Fatal(err)
+	}
 }
