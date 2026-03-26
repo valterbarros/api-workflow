@@ -57,7 +57,7 @@ func findVersion(lines []string, index int, taskId, lastVersion string) string {
 	version := versionReg.FindString(line)
 
 	if strings.Contains(line, taskId) {
-		return lastVersion
+		return lastVersion + "\n" + line
 	}
 
 	if version != "" {

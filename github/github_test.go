@@ -30,7 +30,8 @@ func TestGetVersion(t *testing.T) {
 	text := utils.GetFileData("../fixtures/CHANGELOG.md")
 
 	result := getVersion(text, "VOP-1134")
-	expected := `# v1.1411.0`
+	expected := `# v1.1411.0
+- v1.1410.17 -- [VOP-1134] Criar evento de webhook para document ativado ou falha na ativação [#VOP-1134](https://clicksign.atlassian.net/browse/VOP-1134) > [#14754](https://github.com/clicksign/tavola/pull/14754)`
 
 	if result != expected {
 		t.Errorf("error")
