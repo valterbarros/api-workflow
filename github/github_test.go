@@ -2,7 +2,6 @@ package github
 
 import (
 	"api-workflow/utils"
-	"fmt"
 	"testing"
 )
 
@@ -22,7 +21,16 @@ func TestGetLastVersions(t *testing.T) {
 # v1.1410.0
 `
 
-	fmt.Println(result)
+	if result != expected {
+		t.Errorf("error")
+	}
+}
+
+func TestGetVersion(t *testing.T) {
+	text := utils.GetFileData("../fixtures/CHANGELOG.md")
+
+	result := getVersion(text, "VOP-1134")
+	expected := `# v1.1411.0`
 
 	if result != expected {
 		t.Errorf("error")
