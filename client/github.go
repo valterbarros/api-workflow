@@ -13,14 +13,18 @@ type pullRequest struct {
 	Labels []map[string]any
 }
 
-func getRepos() {
+func getPullRequest(url string) pullRequest {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
-	url := "https://api.github.com/repos/clicksign/app-workspaces/pulls/162"
+	currentUrl := "https://api.github.com/repos/clicksign/app-workspaces/pulls/162"
 
-	req, err := http.NewRequest("GET", url, nil)
+	if url != "" {
+		currentUrl = url
+	}
+
+	req, err := http.NewRequest("GET", currentUrl, nil)
 	if err != nil {
-		fmt.Println("error 1", err)
+		fmt.Println("error creating the request", err)
 	}
 	token := "Bearer " + os.Getenv("GH_TOKEN")
 
@@ -32,11 +36,11 @@ func getRepos() {
 	defer resp.Body.Close()
 
 	if err != nil {
-		fmt.Println("error 2", err)
+		fmt.Println("error doing the request", err)
 	}
 
 	var pr pullRequest
 	utils.DecodeJson(resp.Body, &pr)
 
-	fmt.Println(pr.Labels)
+	return pr
 }

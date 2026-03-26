@@ -52,10 +52,13 @@ func SetEnvFromFile() {
 	}
 }
 
-func DecodeJson(data io.Reader, variable any) {
+func DecodeJson(data io.Reader, variable any) error {
 	decoder := json.NewDecoder(data)
 
 	if err := decoder.Decode(&variable); err != nil {
 		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }
