@@ -1,7 +1,7 @@
 package github
 
 import (
-	"api-workflow/internal/client"
+	client "api-workflow/internal/client/github"
 	"regexp"
 	"strings"
 )
