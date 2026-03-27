@@ -47,7 +47,8 @@ func GetPullRequest(url string) pullRequest {
 
 type User struct {
 	User struct {
-		Login string
+		Login      string
+		Avatar_url string
 	}
 	State string
 }

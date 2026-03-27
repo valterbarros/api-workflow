@@ -40,7 +40,7 @@ func TestGetReviews(t *testing.T) {
 		t.Errorf("No results found")
 	}
 
-	if result[0].User["avatar_url"] == nil {
+	if result[0].User.Avatar_url == "" {
 		t.Errorf("No avata found in 0 position")
 	}
 }
