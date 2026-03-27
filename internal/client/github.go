@@ -13,7 +13,7 @@ type pullRequest struct {
 	Labels []map[string]any
 }
 
-func getPullRequest(url string) pullRequest {
+func GetPullRequest(url string) pullRequest {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
 	currentUrl := "https://api.github.com/repos/clicksign/app-workspaces/pulls/162"
@@ -52,7 +52,7 @@ type user struct {
 type reviews []user
 
 // returns raw reviews from on pr
-func getReviews(url string) reviews {
+func GetReviews(url string) reviews {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
 	currentUrl := "https://api.github.com/repos/clicksign/app-workspaces/pulls/162/reviews"
@@ -89,7 +89,7 @@ type repos []struct {
 	Name string
 }
 
-func getRepos(url string) repos {
+func GetRepos(url string) repos {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
 	currentUrl := "https://api.github.com/user/repos?sort=pushed&per_page=30"
@@ -123,7 +123,7 @@ func getRepos(url string) repos {
 
 type pullRequests []pullRequest
 
-func getPullRequests(url string) pullRequests {
+func GetPullRequests(url string) pullRequests {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
 	currentUrl := "https://api.github.com/repos/clicksign/tavola/pulls"

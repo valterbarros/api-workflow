@@ -17,7 +17,7 @@ func TestGetRepo(t *testing.T) {
 
 	defer ser.Close()
 
-	result := getPullRequest(ser.URL)
+	result := GetPullRequest(ser.URL)
 
 	if len(result.Labels) < 1 {
 		t.Errorf("No labels found")
@@ -34,7 +34,7 @@ func TestGetReviews(t *testing.T) {
 
 	defer ser.Close()
 
-	result := getReviews(ser.URL)
+	result := GetReviews(ser.URL)
 
 	if len(result) < 1 {
 		t.Errorf("No results found")
@@ -55,7 +55,7 @@ func TestGetRepos(t *testing.T) {
 
 	defer ser.Close()
 
-	result := getRepos(ser.URL)
+	result := GetRepos(ser.URL)
 
 	if len(result) < 1 {
 		t.Errorf("No results found")
@@ -76,7 +76,7 @@ func TestGetPullRequests(t *testing.T) {
 
 	defer ser.Close()
 
-	result := getPullRequests(ser.URL)
+	result := GetPullRequests(ser.URL)
 
 	if len(result) < 1 {
 		t.Errorf("No results found")
