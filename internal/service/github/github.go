@@ -2,7 +2,12 @@ package github
 
 import (
 	client "api-workflow/internal/client/github"
+	"api-workflow/utils"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"regexp"
+	"slices"
 	"strings"
 )
 
@@ -70,4 +75,74 @@ func findVersion(lines []string, index int, taskId, lastVersion string) string {
 
 func GetPullRequests() client.PullRequests {
 	return client.GetPullRequests("")
+}
+
+type ReviewData struct {
+	text string
+	// green or yellow
+	color string
+}
+
+func ReviewsResult() ReviewData {
+	const MYUSER = "valter-clk"
+	// maybe temp here
+	ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		// 16 comments
+		// 1 approved
+		// 0 dismissed
+		data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews.json"))
+		w.Write([]byte(data))
+	}))
+
+	reviews := client.GetReviews(ser.URL)
+
+	slices.Reverse(reviews)
+	var me string
+	data := []string{}
+	var approveCount int
+
+	for _, review := range reviews {
+		// MY APPROVED
+		if review.User.Login == MYUSER && review.State == "APPROVED" {
+			me = "ME: OK"
+			approveCount++
+		}
+
+		firstL := strings.ToUpper(string(review.User.Login[0]))
+
+		if review.User.Login != MYUSER {
+			switch review.State {
+			case "APPROVED":
+				approveCount++
+				data = append(data, firstL+": OK")
+			case "COMMENTED":
+				data = append(data, firstL+": CO")
+			case "DISMISSED":
+				data = append(data, firstL+": DI")
+			default:
+				fmt.Println("default case")
+			}
+		}
+	}
+
+	var last []string
+
+	if me != "" {
+		last = []string{data[0]}
+		last = append(last, me)
+	} else {
+		last = data[0:2]
+	}
+
+	fmt.Println(last)
+
+	var color string
+	if approveCount > 2 {
+		color = "green"
+	} else {
+		color = "yellow"
+	}
+
+	return ReviewData{strings.Join(last, " "), color}
 }

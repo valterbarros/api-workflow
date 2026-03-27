@@ -3,680 +3,170 @@
     "id": 4002120143,
     "node_id": "PRR_kwDOA3PT187ui4HP",
     "user": {
-      "login": "copilot-pull-request-reviewer[bot]",
-      "id": 175728472,
-      "node_id": "BOT_kgDOCnlnWA",
       "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D",
-      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
-      "followers_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/followers",
-      "following_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/following{/other_user}",
-      "gists_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/subscriptions",
-      "organizations_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/orgs",
-      "repos_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/repos",
-      "events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/received_events",
-      "type": "Bot",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 175728472,
+      "login": "copilot-pull-request-reviewer[bot]"
     },
-    "body": "## Pull request overview\n\nThis PR refactors webhook-triggering behavior into a reusable concern and introduces a dedicated STI hierarchy/table for notarial (envelope) events, moving them out of the generic `Event` STI used for document events.\n\n**Changes:**\n- Added `HookTriggable` concern to centralize delegation + `after_create_commit` webhook enqueueing logic.\n- Refactored `Event` and `AcceptanceTerm::Event` to use `hook_triggable` instead of duplicated callback/trigger code.\n- Introduced `Notarial::Event` (STI) with new `notarial_events` table plus initial subclasses/specs; removed old document-activation event subclasses from `Event`.\n\n### Reviewed changes\n\nCopilot reviewed 15 out of 15 changed files in this pull request and generated 6 comments.\n\n<details>\n<summary>Show a summary per file</summary>\n\n| File | Description |\r\n| ---- | ----------- |\r\n| app/models/concerns/hook_triggable.rb | New concern encapsulating webhook trigger/enqueue logic. |\r\n| app/models/event.rb | Replaces inline webhook trigger code with `HookTriggable`; removes doc activation subclasses from `SUBCLASSES`. |\r\n| app/models/acceptance_term/event.rb | Switches to `HookTriggable` and keeps passing STI class name to `HookWorker`. |\r\n| app/models/notarial/event.rb | New base model for notarial events (STI) with webhook trigger configuration. |\r\n| app/models/notarial/event/envelope_activated.rb | New notarial event subclass intended to represent envelope activation success. |\r\n| app/models/notarial/event/envelope_activation_failed.rb | New notarial event subclass intended to represent envelope activation failure. |\r\n| app/models/event/document_activated.rb | Deleted (moved conceptually to notarial event space). |\r\n| app/models/event/document_activation_failed.rb | Deleted (moved conceptually to notarial event space). |\r\n| db/migrate/20260324193138_create_notarial_events.rb | Creates `notarial_events` table for new STI hierarchy. |\r\n| db/schema.rb | Schema updated for `notarial_events` table + FK. |\r\n| spec/models/concerns/hook_triggable_spec.rb | New specs covering enqueue behavior when the concern is included. |\r\n| spec/models/notarial/event_spec.rb | New specs for notarial event base behavior (name/payload/delegation). |\r\n| spec/models/notarial/event/envelope_activated_spec.rb | Updated to validate notarial envelope-activated event data. |\r\n| spec/models/notarial/event/envelope_activation_failed_spec.rb | Updated to validate notarial envelope-activation-failed event data. |\r\n| spec/factories/notarial/events.rb | Factory for `Notarial::Event` (STI). |\n</details>\n\n\n\n\n\n\n---\n\n💡 <a href=\"/clicksign/tavola/new/main?filename=.github/instructions/*.instructions.md\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Add Copilot custom instructions</a> for smarter, more guided reviews. <a href=\"https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn how to get started</a>.",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4002120143",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "NONE",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4002120143"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-24T20:34:47Z",
-    "commit_id": "8a5d114ce8dbb758269722b037a6a41ef83ddae5"
+    "state": "COMMENTED"
   },
   {
     "id": 4002135203,
     "node_id": "PRR_kwDOA3PT187ui7yj",
     "user": {
-      "login": "danilojosino",
-      "id": 249334653,
-      "node_id": "U_kgDODtyLfQ",
       "avatar_url": "https://avatars.githubusercontent.com/u/249334653?u=30312c2ab5a8e2e32aa5d18b6ed29eabc918e9a3&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/danilojosino",
-      "html_url": "https://github.com/danilojosino",
-      "followers_url": "https://api.github.com/users/danilojosino/followers",
-      "following_url": "https://api.github.com/users/danilojosino/following{/other_user}",
-      "gists_url": "https://api.github.com/users/danilojosino/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/danilojosino/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/danilojosino/subscriptions",
-      "organizations_url": "https://api.github.com/users/danilojosino/orgs",
-      "repos_url": "https://api.github.com/users/danilojosino/repos",
-      "events_url": "https://api.github.com/users/danilojosino/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/danilojosino/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249334653,
+      "login": "danilojosino"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4002135203",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4002135203"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-24T20:38:03Z",
-    "commit_id": "8a5d114ce8dbb758269722b037a6a41ef83ddae5"
+    "state": "COMMENTED"
   },
   {
-    "id": 4002136174,
+    "id": 2002136171,
     "node_id": "PRR_kwDOA3PT187ui8Bu",
     "user": {
-      "login": "danilojosino",
-      "id": 249334653,
-      "node_id": "U_kgDODtyLfQ",
       "avatar_url": "https://avatars.githubusercontent.com/u/249334653?u=30312c2ab5a8e2e32aa5d18b6ed29eabc918e9a3&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/danilojosino",
-      "html_url": "https://github.com/danilojosino",
-      "followers_url": "https://api.github.com/users/danilojosino/followers",
-      "following_url": "https://api.github.com/users/danilojosino/following{/other_user}",
-      "gists_url": "https://api.github.com/users/danilojosino/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/danilojosino/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/danilojosino/subscriptions",
-      "organizations_url": "https://api.github.com/users/danilojosino/orgs",
-      "repos_url": "https://api.github.com/users/danilojosino/repos",
-      "events_url": "https://api.github.com/users/danilojosino/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/danilojosino/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249334653,
+      "login": "valter-clk"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4002136174",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4002136174"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-24T20:38:15Z",
-    "commit_id": "8a5d114ce8dbb758269722b037a6a41ef83ddae5"
+    "state": "APPROVED"
   },
   {
     "id": 4002191442,
     "node_id": "PRR_kwDOA3PT187ujJhS",
     "user": {
-      "login": "copilot-pull-request-reviewer[bot]",
-      "id": 175728472,
-      "node_id": "BOT_kgDOCnlnWA",
       "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D",
-      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
-      "followers_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/followers",
-      "following_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/following{/other_user}",
-      "gists_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/subscriptions",
-      "organizations_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/orgs",
-      "repos_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/repos",
-      "events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/received_events",
-      "type": "Bot",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 175728472,
+      "login": "copilot-pull-request-reviewer[bot]"
     },
-    "body": "## Pull request overview\n\nCopilot reviewed 15 out of 15 changed files in this pull request and generated 2 comments.\n\n\n\n\n\n---\n\n💡 <a href=\"/clicksign/tavola/new/main?filename=.github/instructions/*.instructions.md\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Add Copilot custom instructions</a> for smarter, more guided reviews. <a href=\"https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn how to get started</a>.",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4002191442",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "NONE",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4002191442"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-24T20:47:54Z",
-    "commit_id": "0f0c5e4bb6d923aa51f7b2aced5954de925c9f17"
+    "state": "COMMENTED"
   },
   {
     "id": 4002339257,
     "node_id": "PRR_kwDOA3PT187ujtm5",
     "user": {
-      "login": "copilot-pull-request-reviewer[bot]",
-      "id": 175728472,
-      "node_id": "BOT_kgDOCnlnWA",
       "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D",
-      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
-      "followers_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/followers",
-      "following_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/following{/other_user}",
-      "gists_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/subscriptions",
-      "organizations_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/orgs",
-      "repos_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/repos",
-      "events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/received_events",
-      "type": "Bot",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 175728472,
+      "login": "copilot-pull-request-reviewer[bot]"
     },
-    "body": "## Pull request overview\n\nCopilot reviewed 15 out of 15 changed files in this pull request and generated 1 comment.\n\n\n\n\n\n---\n\n💡 <a href=\"/clicksign/tavola/new/main?filename=.github/instructions/*.instructions.md\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Add Copilot custom instructions</a> for smarter, more guided reviews. <a href=\"https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn how to get started</a>.",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4002339257",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "NONE",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4002339257"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-24T21:16:00Z",
-    "commit_id": "364dabcf340f64a21cda9668d6fcb7053baaec54"
+    "state": "COMMENTED"
   },
   {
     "id": 4006126493,
     "node_id": "PRR_kwDOA3PT187uyKOd",
     "user": {
-      "login": "derickpimenta-clk",
-      "id": 249637074,
-      "node_id": "U_kgDODuEo0g",
       "avatar_url": "https://avatars.githubusercontent.com/u/249637074?u=2a50010cf3cbbe486b3417246632a48c2b5a5fe2&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/derickpimenta-clk",
-      "html_url": "https://github.com/derickpimenta-clk",
-      "followers_url": "https://api.github.com/users/derickpimenta-clk/followers",
-      "following_url": "https://api.github.com/users/derickpimenta-clk/following{/other_user}",
-      "gists_url": "https://api.github.com/users/derickpimenta-clk/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/derickpimenta-clk/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/derickpimenta-clk/subscriptions",
-      "organizations_url": "https://api.github.com/users/derickpimenta-clk/orgs",
-      "repos_url": "https://api.github.com/users/derickpimenta-clk/repos",
-      "events_url": "https://api.github.com/users/derickpimenta-clk/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/derickpimenta-clk/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249637074,
+      "login": "derickpimenta-clk"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4006126493",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4006126493"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-25T12:01:59Z",
-    "commit_id": "c5c45abeb0090497f1332f50be1c70124642305a"
+    "state": "COMMENTED"
   },
   {
     "id": 4007052704,
     "node_id": "PRR_kwDOA3PT187u1sWg",
     "user": {
-      "login": "danilojosino",
-      "id": 249334653,
-      "node_id": "U_kgDODtyLfQ",
       "avatar_url": "https://avatars.githubusercontent.com/u/249334653?u=30312c2ab5a8e2e32aa5d18b6ed29eabc918e9a3&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/danilojosino",
-      "html_url": "https://github.com/danilojosino",
-      "followers_url": "https://api.github.com/users/danilojosino/followers",
-      "following_url": "https://api.github.com/users/danilojosino/following{/other_user}",
-      "gists_url": "https://api.github.com/users/danilojosino/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/danilojosino/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/danilojosino/subscriptions",
-      "organizations_url": "https://api.github.com/users/danilojosino/orgs",
-      "repos_url": "https://api.github.com/users/danilojosino/repos",
-      "events_url": "https://api.github.com/users/danilojosino/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/danilojosino/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249334653,
+      "login": "danilojosino"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4007052704",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4007052704"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-25T14:18:04Z",
-    "commit_id": "c5c45abeb0090497f1332f50be1c70124642305a"
+    "state": "COMMENTED"
   },
   {
     "id": 4007990175,
     "node_id": "PRR_kwDOA3PT187u5ROf",
     "user": {
-      "login": "derickpimenta-clk",
-      "id": 249637074,
-      "node_id": "U_kgDODuEo0g",
       "avatar_url": "https://avatars.githubusercontent.com/u/249637074?u=2a50010cf3cbbe486b3417246632a48c2b5a5fe2&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/derickpimenta-clk",
-      "html_url": "https://github.com/derickpimenta-clk",
-      "followers_url": "https://api.github.com/users/derickpimenta-clk/followers",
-      "following_url": "https://api.github.com/users/derickpimenta-clk/following{/other_user}",
-      "gists_url": "https://api.github.com/users/derickpimenta-clk/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/derickpimenta-clk/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/derickpimenta-clk/subscriptions",
-      "organizations_url": "https://api.github.com/users/derickpimenta-clk/orgs",
-      "repos_url": "https://api.github.com/users/derickpimenta-clk/repos",
-      "events_url": "https://api.github.com/users/derickpimenta-clk/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/derickpimenta-clk/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249637074,
+      "login": "derickpimenta-clk"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4007990175",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4007990175"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-25T16:12:42Z",
-    "commit_id": "c5c45abeb0090497f1332f50be1c70124642305a"
+    "state": "COMMENTED"
   },
   {
     "id": 4008007890,
     "node_id": "PRR_kwDOA3PT187u5VjS",
     "user": {
-      "login": "derickpimenta-clk",
-      "id": 249637074,
-      "node_id": "U_kgDODuEo0g",
       "avatar_url": "https://avatars.githubusercontent.com/u/249637074?u=2a50010cf3cbbe486b3417246632a48c2b5a5fe2&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/derickpimenta-clk",
-      "html_url": "https://github.com/derickpimenta-clk",
-      "followers_url": "https://api.github.com/users/derickpimenta-clk/followers",
-      "following_url": "https://api.github.com/users/derickpimenta-clk/following{/other_user}",
-      "gists_url": "https://api.github.com/users/derickpimenta-clk/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/derickpimenta-clk/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/derickpimenta-clk/subscriptions",
-      "organizations_url": "https://api.github.com/users/derickpimenta-clk/orgs",
-      "repos_url": "https://api.github.com/users/derickpimenta-clk/repos",
-      "events_url": "https://api.github.com/users/derickpimenta-clk/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/derickpimenta-clk/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249637074,
+      "login": "derickpimenta-clk"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4008007890",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4008007890"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-25T16:15:10Z",
-    "commit_id": "c5c45abeb0090497f1332f50be1c70124642305a"
+    "state": "COMMENTED"
   },
   {
     "id": 4008082015,
     "node_id": "PRR_kwDOA3PT187u5npf",
     "user": {
-      "login": "derickpimenta-clk",
-      "id": 249637074,
-      "node_id": "U_kgDODuEo0g",
       "avatar_url": "https://avatars.githubusercontent.com/u/249637074?u=2a50010cf3cbbe486b3417246632a48c2b5a5fe2&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/derickpimenta-clk",
-      "html_url": "https://github.com/derickpimenta-clk",
-      "followers_url": "https://api.github.com/users/derickpimenta-clk/followers",
-      "following_url": "https://api.github.com/users/derickpimenta-clk/following{/other_user}",
-      "gists_url": "https://api.github.com/users/derickpimenta-clk/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/derickpimenta-clk/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/derickpimenta-clk/subscriptions",
-      "organizations_url": "https://api.github.com/users/derickpimenta-clk/orgs",
-      "repos_url": "https://api.github.com/users/derickpimenta-clk/repos",
-      "events_url": "https://api.github.com/users/derickpimenta-clk/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/derickpimenta-clk/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249637074,
+      "login": "derickpimenta-clk"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4008082015",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4008082015"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-25T16:24:43Z",
-    "commit_id": "c5c45abeb0090497f1332f50be1c70124642305a"
+    "state": "COMMENTED"
   },
   {
     "id": 4009119324,
     "node_id": "PRR_kwDOA3PT187u9k5c",
     "user": {
-      "login": "danilojosino",
-      "id": 249334653,
-      "node_id": "U_kgDODtyLfQ",
       "avatar_url": "https://avatars.githubusercontent.com/u/249334653?u=30312c2ab5a8e2e32aa5d18b6ed29eabc918e9a3&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/danilojosino",
-      "html_url": "https://github.com/danilojosino",
-      "followers_url": "https://api.github.com/users/danilojosino/followers",
-      "following_url": "https://api.github.com/users/danilojosino/following{/other_user}",
-      "gists_url": "https://api.github.com/users/danilojosino/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/danilojosino/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/danilojosino/subscriptions",
-      "organizations_url": "https://api.github.com/users/danilojosino/orgs",
-      "repos_url": "https://api.github.com/users/danilojosino/repos",
-      "events_url": "https://api.github.com/users/danilojosino/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/danilojosino/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249334653,
+      "login": "danilojosino"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4009119324",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4009119324"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-25T19:02:17Z",
-    "commit_id": "c5c45abeb0090497f1332f50be1c70124642305a"
+    "state": "COMMENTED"
   },
   {
     "id": 4009123925,
     "node_id": "PRR_kwDOA3PT187u9mBV",
     "user": {
-      "login": "danilojosino",
-      "id": 249334653,
-      "node_id": "U_kgDODtyLfQ",
       "avatar_url": "https://avatars.githubusercontent.com/u/249334653?u=30312c2ab5a8e2e32aa5d18b6ed29eabc918e9a3&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/danilojosino",
-      "html_url": "https://github.com/danilojosino",
-      "followers_url": "https://api.github.com/users/danilojosino/followers",
-      "following_url": "https://api.github.com/users/danilojosino/following{/other_user}",
-      "gists_url": "https://api.github.com/users/danilojosino/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/danilojosino/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/danilojosino/subscriptions",
-      "organizations_url": "https://api.github.com/users/danilojosino/orgs",
-      "repos_url": "https://api.github.com/users/danilojosino/repos",
-      "events_url": "https://api.github.com/users/danilojosino/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/danilojosino/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249334653,
+      "login": "danilojosino"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4009123925",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4009123925"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-25T19:03:04Z",
-    "commit_id": "c5c45abeb0090497f1332f50be1c70124642305a"
+    "state": "COMMENTED"
   },
   {
     "id": 4013271734,
     "node_id": "PRR_kwDOA3PT187vNaq2",
     "user": {
-      "login": "copilot-pull-request-reviewer[bot]",
-      "id": 175728472,
-      "node_id": "BOT_kgDOCnlnWA",
       "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D",
-      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
-      "followers_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/followers",
-      "following_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/following{/other_user}",
-      "gists_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/subscriptions",
-      "organizations_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/orgs",
-      "repos_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/repos",
-      "events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/received_events",
-      "type": "Bot",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 175728472,
+      "login": "copilot-pull-request-reviewer[bot]"
     },
-    "body": "## Pull request overview\n\nCopilot reviewed 24 out of 24 changed files in this pull request and generated 2 comments.\n\n\n<details>\n<summary>Comments suppressed due to low confidence (1)</summary>\n\n**spec/models/concerns/hook_triggable_spec.rb:40**\n* This spec file repeats the frozen-string-literal magic comment and `require 'rails_helper'` a second time mid-file. That duplication is usually accidental and makes the spec harder to maintain; consider removing the second header block.\n</details>\n\n\n\n---\n\n💡 <a href=\"/clicksign/tavola/new/main?filename=.github/instructions/*.instructions.md\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Add Copilot custom instructions</a> for smarter, more guided reviews. <a href=\"https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn how to get started</a>.",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4013271734",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "NONE",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4013271734"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-26T11:23:15Z",
-    "commit_id": "40ec9edcf9893a33d8dba92d5ddecfeb6581e7cd"
+    "state": "COMMENTED"
   },
   {
     "id": 4014276000,
     "node_id": "PRR_kwDOA3PT187vRP2g",
     "user": {
-      "login": "copilot-pull-request-reviewer[bot]",
-      "id": 175728472,
-      "node_id": "BOT_kgDOCnlnWA",
       "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D",
-      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
-      "followers_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/followers",
-      "following_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/following{/other_user}",
-      "gists_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/subscriptions",
-      "organizations_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/orgs",
-      "repos_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/repos",
-      "events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/received_events",
-      "type": "Bot",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 175728472,
+      "login": "copilot-pull-request-reviewer[bot]"
     },
-    "body": "## Pull request overview\n\nCopilot reviewed 23 out of 23 changed files in this pull request and generated 2 comments.\n\n\n\n\n\n---\n\n💡 <a href=\"/clicksign/tavola/new/main?filename=.github/instructions/*.instructions.md\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Add Copilot custom instructions</a> for smarter, more guided reviews. <a href=\"https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn how to get started</a>.",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4014276000",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "NONE",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4014276000"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-26T13:43:04Z",
-    "commit_id": "b19b59419ce40caab0cab57f58ea76da74458c82"
+    "state": "COMMENTED"
   },
   {
     "id": 4014737349,
     "node_id": "PRR_kwDOA3PT187vTAfF",
     "user": {
-      "login": "derickpimenta-clk",
-      "id": 249637074,
-      "node_id": "U_kgDODuEo0g",
       "avatar_url": "https://avatars.githubusercontent.com/u/249637074?u=2a50010cf3cbbe486b3417246632a48c2b5a5fe2&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/derickpimenta-clk",
-      "html_url": "https://github.com/derickpimenta-clk",
-      "followers_url": "https://api.github.com/users/derickpimenta-clk/followers",
-      "following_url": "https://api.github.com/users/derickpimenta-clk/following{/other_user}",
-      "gists_url": "https://api.github.com/users/derickpimenta-clk/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/derickpimenta-clk/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/derickpimenta-clk/subscriptions",
-      "organizations_url": "https://api.github.com/users/derickpimenta-clk/orgs",
-      "repos_url": "https://api.github.com/users/derickpimenta-clk/repos",
-      "events_url": "https://api.github.com/users/derickpimenta-clk/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/derickpimenta-clk/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249637074,
+      "login": "derickpimenta-clk"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4014737349",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4014737349"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-26T14:29:18Z",
-    "commit_id": "c5c45abeb0090497f1332f50be1c70124642305a"
+    "state": "COMMENTED"
   },
   {
     "id": 4014882694,
     "node_id": "PRR_kwDOA3PT187vTj-G",
     "user": {
-      "login": "derickpimenta-clk",
-      "id": 249637074,
-      "node_id": "U_kgDODuEo0g",
       "avatar_url": "https://avatars.githubusercontent.com/u/249637074?u=2a50010cf3cbbe486b3417246632a48c2b5a5fe2&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/derickpimenta-clk",
-      "html_url": "https://github.com/derickpimenta-clk",
-      "followers_url": "https://api.github.com/users/derickpimenta-clk/followers",
-      "following_url": "https://api.github.com/users/derickpimenta-clk/following{/other_user}",
-      "gists_url": "https://api.github.com/users/derickpimenta-clk/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/derickpimenta-clk/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/derickpimenta-clk/subscriptions",
-      "organizations_url": "https://api.github.com/users/derickpimenta-clk/orgs",
-      "repos_url": "https://api.github.com/users/derickpimenta-clk/repos",
-      "events_url": "https://api.github.com/users/derickpimenta-clk/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/derickpimenta-clk/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249637074,
+      "login": "derickpimenta-clk"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4014882694",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4014882694"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-26T14:45:04Z",
-    "commit_id": "c5c45abeb0090497f1332f50be1c70124642305a"
+    "state": "COMMENTED"
   },
   {
     "id": 4015297068,
     "node_id": "PRR_kwDOA3PT187vVJIs",
     "user": {
-      "login": "danilojosino",
-      "id": 249334653,
-      "node_id": "U_kgDODtyLfQ",
       "avatar_url": "https://avatars.githubusercontent.com/u/249334653?u=30312c2ab5a8e2e32aa5d18b6ed29eabc918e9a3&v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/danilojosino",
-      "html_url": "https://github.com/danilojosino",
-      "followers_url": "https://api.github.com/users/danilojosino/followers",
-      "following_url": "https://api.github.com/users/danilojosino/following{/other_user}",
-      "gists_url": "https://api.github.com/users/danilojosino/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/danilojosino/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/danilojosino/subscriptions",
-      "organizations_url": "https://api.github.com/users/danilojosino/orgs",
-      "repos_url": "https://api.github.com/users/danilojosino/repos",
-      "events_url": "https://api.github.com/users/danilojosino/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/danilojosino/received_events",
-      "type": "User",
-      "user_view_type": "public",
-      "site_admin": false
+      "id": 249334653,
+      "login": "danilojosino"
     },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4015297068",
-    "pull_request_url": "https://api.github.com/repos/clicksign/tavola/pulls/14781",
-    "author_association": "MEMBER",
-    "_links": {
-      "html": {
-        "href": "https://github.com/clicksign/tavola/pull/14781#pullrequestreview-4015297068"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/clicksign/tavola/pulls/14781"
-      }
-    },
-    "submitted_at": "2026-03-26T15:36:42Z",
-    "commit_id": "c5c45abeb0090497f1332f50be1c70124642305a"
+    "state": "COMMENTED"
   }
 ]

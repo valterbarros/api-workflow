@@ -45,14 +45,17 @@ func GetPullRequest(url string) pullRequest {
 	return pr
 }
 
-type user struct {
-	User map[string]any
+type User struct {
+	User struct {
+		Login string
+	}
+	State string
 }
 
-type reviews []user
+type Reviews []User
 
 // returns raw reviews from on pr
-func GetReviews(url string) reviews {
+func GetReviews(url string) Reviews {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
 	currentUrl := "https://api.github.com/repos/clicksign/app-workspaces/pulls/162/reviews"
@@ -78,7 +81,7 @@ func GetReviews(url string) reviews {
 		fmt.Println("error doing the request", err)
 	}
 
-	var review reviews
+	var review Reviews
 	utils.DecodeJson(resp.Body, &review)
 
 	return review

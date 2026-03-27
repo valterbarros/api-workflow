@@ -37,3 +37,17 @@ func TestGetVersion(t *testing.T) {
 		t.Errorf("error")
 	}
 }
+
+func TestReviewsResult(t *testing.T) {
+	t.Run("when has 16 comments and I approved the pr", func(t *testing.T) {
+		result := ReviewsResult()
+
+		if result.color != "yellow" {
+			t.Error("not equal color")
+		}
+
+		if result.text != "D: CO ME: OK" {
+			t.Error("not equal review data")
+		}
+	})
+}
