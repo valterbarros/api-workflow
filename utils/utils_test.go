@@ -23,7 +23,9 @@ type dataReturn struct {
 func TestJsonToGo(t *testing.T) {
 	var variable dataReturn
 
-	data, _ := os.Open("../fixtures/json-return.json")
+	fixture := GetFromRoot("fixtures/json-return.json")
+
+	data, _ := os.Open(fixture)
 	DecodeJson(data, &variable)
 
 	if len(variable.Labels) < 1 {

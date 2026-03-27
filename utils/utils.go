@@ -5,8 +5,15 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
+
+func GetFromRoot(path string) string {
+	var Root, _ = filepath.Abs(os.Getenv("HOME") + "/workspace/api-workflow")
+
+	return filepath.Join(Root, path)
+}
 
 func IterateFiles(path, ignore string, fn func(name string)) {
 	files, _ := os.ReadDir(path)
@@ -33,7 +40,7 @@ func ResetFile(file string) {
 func GetFileData(file string) string {
 	data, err := os.ReadFile(file)
 	if err != nil {
-		panic("Error to open file")
+		log.Fatal("Error to open file utils.go", err)
 	}
 
 	return string(data)
@@ -44,7 +51,8 @@ func Capitalize(s string) string {
 }
 
 func SetEnvFromFile() {
-	data := GetFileData("../.env")
+	env := GetFromRoot(".env")
+	data := GetFileData(env)
 	vars := strings.SplitSeq(data, "\n")
 	for variable := range vars {
 		spt := strings.Split(variable, "=")

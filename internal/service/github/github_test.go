@@ -6,7 +6,7 @@ import (
 )
 
 func TestGetLastVersions(t *testing.T) {
-	text := utils.GetFileData("../fixtures/CHANGELOG.md")
+	text := utils.GetFileData(utils.GetFromRoot("fixtures/CHANGELOG.md"))
 
 	result := getLastVersions(text, 3, "VOP")
 	expected := `# v1.1413.0
@@ -27,7 +27,7 @@ func TestGetLastVersions(t *testing.T) {
 }
 
 func TestGetVersion(t *testing.T) {
-	text := utils.GetFileData("../fixtures/CHANGELOG.md")
+	text := utils.GetFileData(utils.GetFromRoot("fixtures/CHANGELOG.md"))
 
 	result := getVersion(text, "VOP-1134")
 	expected := `# v1.1411.0

@@ -11,7 +11,7 @@ func TestGetRepo(t *testing.T) {
 	// Mock server
 	ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		data := utils.GetFileData("../fixtures/json-return.json")
+		data := utils.GetFileData(utils.GetFromRoot("fixtures/json-return.json"))
 		w.Write([]byte(data))
 	}))
 
@@ -28,7 +28,7 @@ func TestGetReviews(t *testing.T) {
 	// Mock server
 	ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		data := utils.GetFileData("../fixtures/reviews.json")
+		data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews.json"))
 		w.Write([]byte(data))
 	}))
 
@@ -49,7 +49,7 @@ func TestGetRepos(t *testing.T) {
 	// Mock server
 	ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		data := utils.GetFileData("../fixtures/repos.json")
+		data := utils.GetFileData(utils.GetFromRoot("fixtures/repos.json"))
 		w.Write([]byte(data))
 	}))
 
@@ -70,7 +70,7 @@ func TestGetPullRequests(t *testing.T) {
 	// Mock server
 	ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		data := utils.GetFileData("../fixtures/pull-requests.json")
+		data := utils.GetFileData(utils.GetFromRoot("fixtures/pull-requests.json"))
 		w.Write([]byte(data))
 	}))
 
