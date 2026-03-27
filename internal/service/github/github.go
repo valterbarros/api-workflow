@@ -1,6 +1,7 @@
 package github
 
 import (
+	"api-workflow/internal/client"
 	"regexp"
 	"strings"
 )
@@ -9,7 +10,7 @@ var (
 	versionReg = regexp.MustCompile(`# (v\d+\.\d+\.\d+)`)
 )
 
-func getLastVersions(text string, count int, term string) (allVersion string) {
+func GetLastVersions(text string, count int, term string) (allVersion string) {
 	if !strings.Contains(text, term) {
 		return ""
 	}
@@ -41,7 +42,7 @@ func getLastVersions(text string, count int, term string) (allVersion string) {
 	return out.String()
 }
 
-func getVersion(text, taskId string) (lastVersion string) {
+func GetVersion(text, taskId string) (lastVersion string) {
 	if !strings.Contains(text, taskId) {
 		return ""
 	}
@@ -65,4 +66,8 @@ func findVersion(lines []string, index int, taskId, lastVersion string) string {
 	} else {
 		return findVersion(lines, index+1, taskId, lastVersion)
 	}
+}
+
+func GetPullRequests() client.PullRequests {
+	return client.GetPullRequests("")
 }

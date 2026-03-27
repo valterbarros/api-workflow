@@ -1,4 +1,4 @@
-package requests
+package client
 
 import (
 	"api-workflow/utils"
@@ -121,9 +121,9 @@ func GetRepos(url string) repos {
 	return repos
 }
 
-type pullRequests []pullRequest
+type PullRequests []pullRequest
 
-func GetPullRequests(url string) pullRequests {
+func GetPullRequests(url string) PullRequests {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
 	currentUrl := "https://api.github.com/repos/clicksign/tavola/pulls"
@@ -149,7 +149,7 @@ func GetPullRequests(url string) pullRequests {
 		fmt.Println("error doing the request", err)
 	}
 
-	var pullRequests pullRequests
+	var pullRequests PullRequests
 	utils.DecodeJson(resp.Body, &pullRequests)
 
 	return pullRequests

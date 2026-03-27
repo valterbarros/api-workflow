@@ -8,7 +8,7 @@ import (
 func TestGetLastVersions(t *testing.T) {
 	text := utils.GetFileData(utils.GetFromRoot("fixtures/CHANGELOG.md"))
 
-	result := getLastVersions(text, 3, "VOP")
+	result := GetLastVersions(text, 3, "VOP")
 	expected := `# v1.1413.0
 - [VOP-1172] Tratar conversões de documentos excluídos no ConvertWorker [#VOP-1172](https://clicksign.atlassian.net/browse/VOP-1172) > [#14768](https://github.com/clicksign/tavola/pull/14768)
 # v1.1412.0
@@ -29,7 +29,7 @@ func TestGetLastVersions(t *testing.T) {
 func TestGetVersion(t *testing.T) {
 	text := utils.GetFileData(utils.GetFromRoot("fixtures/CHANGELOG.md"))
 
-	result := getVersion(text, "VOP-1134")
+	result := GetVersion(text, "VOP-1134")
 	expected := `# v1.1411.0
 - v1.1410.17 -- [VOP-1134] Criar evento de webhook para document ativado ou falha na ativação [#VOP-1134](https://clicksign.atlassian.net/browse/VOP-1134) > [#14754](https://github.com/clicksign/tavola/pull/14754)`
 

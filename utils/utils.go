@@ -70,3 +70,14 @@ func DecodeJson(data io.Reader, variable any) error {
 
 	return nil
 }
+
+func EncodeJson(data io.Writer, variable any) error {
+	decoder := json.NewEncoder(data)
+
+	if err := decoder.Encode(&variable); err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	return nil
+}

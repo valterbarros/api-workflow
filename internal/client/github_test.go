@@ -1,4 +1,4 @@
-package requests
+package client
 
 import (
 	"api-workflow/utils"
