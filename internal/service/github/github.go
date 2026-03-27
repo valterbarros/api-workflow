@@ -2,10 +2,8 @@ package github
 
 import (
 	client "api-workflow/internal/client/github"
-	"api-workflow/utils"
 	"fmt"
-	"net/http"
-	"net/http/httptest"
+	"math"
 	"regexp"
 	"slices"
 	"strings"
@@ -83,23 +81,14 @@ type ReviewData struct {
 	color string
 }
 
-func ReviewsResult() ReviewData {
+func ReviewsResult(url string) ReviewData {
 	const MYUSER = "valter-clk"
-	// maybe temp here
-	ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		// 16 comments
-		// 1 approved
-		// 0 dismissed
-		data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews.json"))
-		w.Write([]byte(data))
-	}))
 
-	reviews := client.GetReviews(ser.URL)
+	reviews := client.GetReviews(url)
 
 	slices.Reverse(reviews)
 	var me string
-	data := []string{}
+	var notMe = []string{}
 	var approveCount int
 
 	for _, review := range reviews {
@@ -107,6 +96,7 @@ func ReviewsResult() ReviewData {
 		if review.User.Login == MYUSER && review.State == "APPROVED" {
 			me = "ME: OK"
 			approveCount++
+			continue
 		}
 
 		firstL := strings.ToUpper(string(review.User.Login[0]))
@@ -115,27 +105,34 @@ func ReviewsResult() ReviewData {
 			switch review.State {
 			case "APPROVED":
 				approveCount++
-				data = append(data, firstL+": OK")
+				notMe = append(notMe, firstL+": OK")
 			case "COMMENTED":
-				data = append(data, firstL+": CO")
+				notMe = append(notMe, firstL+": CO")
 			case "DISMISSED":
-				data = append(data, firstL+": DI")
+				notMe = append(notMe, firstL+": DI")
 			default:
 				fmt.Println("default case")
 			}
 		}
 	}
 
-	var last []string
+	var result = []string{}
 
-	if me != "" {
-		last = []string{data[0]}
-		last = append(last, me)
-	} else {
-		last = data[0:2]
+	if len(notMe) > 1 {
+		result = notMe[0:2]
 	}
 
-	fmt.Println(last)
+	if me != "" {
+		result = append(result, me)
+	}
+
+	if len(result) < 1 {
+		return ReviewData{"No reviews", "yellow"}
+	}
+
+	size := float64(len(result))
+	start := int(math.Max(size-2, 0))
+	result = result[start:]
 
 	var color string
 	if approveCount > 2 {
@@ -144,5 +141,5 @@ func ReviewsResult() ReviewData {
 		color = "yellow"
 	}
 
-	return ReviewData{strings.Join(last, " "), color}
+	return ReviewData{strings.Join(result, " "), color}
 }

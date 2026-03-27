@@ -2,6 +2,8 @@ package github
 
 import (
 	"api-workflow/utils"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 )
 
@@ -40,7 +42,18 @@ func TestGetVersion(t *testing.T) {
 
 func TestReviewsResult(t *testing.T) {
 	t.Run("when has 16 comments and I approved the pr", func(t *testing.T) {
-		result := ReviewsResult()
+		ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			// 16 comments
+			// 1 approved
+			// 0 dismissed
+			data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews.json"))
+			w.Write([]byte(data))
+		}))
+
+		defer ser.Close()
+
+		result := ReviewsResult(ser.URL)
 
 		if result.color != "yellow" {
 			t.Error("not equal color")
@@ -48,6 +61,75 @@ func TestReviewsResult(t *testing.T) {
 
 		if result.text != "D: CO ME: OK" {
 			t.Error("not equal review data")
+		}
+	})
+	t.Run("when has more than 2 approves", func(t *testing.T) {
+		ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			// 14 comments
+			// 3 approved
+			// 0 dismissed
+			// data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews.json"))
+			data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews-approved.json"))
+			w.Write([]byte(data))
+		}))
+
+		defer ser.Close()
+
+		result := ReviewsResult(ser.URL)
+
+		if result.color != "green" {
+			t.Error("not equal color")
+		}
+
+		if result.text != "D: CO ME: OK" {
+			t.Error("not equal review data")
+		}
+	})
+
+	t.Run("when has no reviews", func(t *testing.T) {
+		ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			// 14 comments
+			// 3 approved
+			// 0 dismissed
+			// data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews.json"))
+			w.Write([]byte("[]"))
+		}))
+
+		defer ser.Close()
+
+		result := ReviewsResult(ser.URL)
+
+		if result.color != "yellow" {
+			t.Error("not equal color")
+		}
+
+		if result.text != "No reviews" {
+			t.Error("not equal review data")
+		}
+	})
+
+	t.Run("when has no reviews", func(t *testing.T) {
+		ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			// 14 comments
+			// 3 approved
+			// 0 dismissed
+			// data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews.json"))
+			w.Write([]byte(`[{"state": "APPROVED", "user": {"login": "valter-clk"}}]`))
+		}))
+
+		defer ser.Close()
+
+		result := ReviewsResult(ser.URL)
+
+		if result.color != "yellow" {
+			t.Error("not equal color")
+		}
+
+		if result.text != "ME: OK" {
+			t.Error("not equal review data result:", result.text)
 		}
 	})
 }
