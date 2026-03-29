@@ -59,7 +59,7 @@ type Reviews []User
 func GetReviews(url string) Reviews {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
-	currentUrl := "https://api.github.com/repos/clicksign/app-workspaces/pulls/162/reviews"
+	currentUrl := "https://api.github.com/repos/clicksign/tavola/pulls/14781/reviews"
 
 	if url != "" {
 		currentUrl = url

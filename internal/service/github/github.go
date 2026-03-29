@@ -76,9 +76,9 @@ func GetPullRequests() client.PullRequests {
 }
 
 type ReviewData struct {
-	text string
+	Text string `json:"text"`
 	// green or yellow
-	color string
+	Color string `json:"color"`
 }
 
 func ReviewsResult(url string) ReviewData {

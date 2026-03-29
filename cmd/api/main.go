@@ -44,7 +44,9 @@ func main() {
 	// })
 
 	mux.HandleFunc("/reviews", func(w http.ResponseWriter, r *http.Request) {
-		result := github.ReviewsResult("")
+		// TODO: pass only the repo and name and pr id
+		url := r.URL.Query().Get("url")
+		result := github.ReviewsResult(url)
 		w.Header().Set("Content-Type", "application/json")
 		utils.EncodeJson(w, result)
 	})

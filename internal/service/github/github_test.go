@@ -55,11 +55,11 @@ func TestReviewsResult(t *testing.T) {
 
 		result := ReviewsResult(ser.URL)
 
-		if result.color != "yellow" {
+		if result.Color != "yellow" {
 			t.Error("not equal color")
 		}
 
-		if result.text != "D: CO ME: OK" {
+		if result.Text != "D: CO ME: OK" {
 			t.Error("not equal review data")
 		}
 	})
@@ -78,11 +78,11 @@ func TestReviewsResult(t *testing.T) {
 
 		result := ReviewsResult(ser.URL)
 
-		if result.color != "green" {
+		if result.Color != "green" {
 			t.Error("not equal color")
 		}
 
-		if result.text != "D: CO ME: OK" {
+		if result.Text != "D: CO ME: OK" {
 			t.Error("not equal review data")
 		}
 	})
@@ -101,11 +101,11 @@ func TestReviewsResult(t *testing.T) {
 
 		result := ReviewsResult(ser.URL)
 
-		if result.color != "yellow" {
+		if result.Color != "yellow" {
 			t.Error("not equal color")
 		}
 
-		if result.text != "No reviews" {
+		if result.Text != "No reviews" {
 			t.Error("not equal review data")
 		}
 	})
@@ -124,12 +124,12 @@ func TestReviewsResult(t *testing.T) {
 
 		result := ReviewsResult(ser.URL)
 
-		if result.color != "yellow" {
+		if result.Color != "yellow" {
 			t.Error("not equal color")
 		}
 
-		if result.text != "ME: OK" {
-			t.Error("not equal review data result:", result.text)
+		if result.Text != "ME: OK" {
+			t.Error("not equal review data result:", result.Text)
 		}
 	})
 }
