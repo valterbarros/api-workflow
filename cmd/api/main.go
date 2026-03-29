@@ -3,10 +3,26 @@ package main
 import (
 	"api-workflow/internal/service/github"
 	"api-workflow/utils"
-	"fmt"
 	"log"
 	"net/http"
 )
+
+func enableCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+
+		w.Header().Set("Access-Control-Allow-Private-Network", "true")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
 
 func getPullRequests(w http.ResponseWriter, r *http.Request) {
 	items := github.GetPullRequests()
@@ -15,14 +31,39 @@ func getPullRequests(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/pull_requests", getPullRequests)
 	const PORT = "12769"
 
-	go func() {
-		fmt.Printf("is running on port %v", PORT)
-	}()
+	mux := http.NewServeMux()
 
-	if err := http.ListenAndServe(":"+PORT, nil); err != nil {
-		log.Fatal(err)
+	// Sua rota de exemplo
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Conteúdo do Iframe via HTTPS e Go"))
+	})
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+
+		// O navegador exige isso para 'loopback' também!
+		w.Header().Set("Access-Control-Allow-Private-Network", "true")
+
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		mux.ServeHTTP(w, r)
+	})
+
+	log.Println("Servidor rodando em https://localhost:", PORT)
+
+	// Usando o seu ListenAndServeTLS
+	// Certifique-se de que os caminhos para .crt e .key estão corretos
+	err := http.ListenAndServeTLS(":"+PORT, utils.GetFromRoot("certs/localhost+3.pem"), utils.GetFromRoot("certs/localhost+3-key.pem"), handler)
+	if err != nil {
+		log.Fatal("Erro ao iniciar servidor: ", err)
 	}
 }
