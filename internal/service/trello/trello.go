@@ -6,12 +6,13 @@ import (
 	"slices"
 )
 
-func CreatePrCard(trelloClient func(string, string), repos ...string) {
+func CreatePrCard(trelloClient func(string, github.PullRequest), repos ...string) {
 	// List all prs from all repos selecteds
 	// For each create a new trello card with title = gh title
 	// TODO: comes from request
 	// repos := []string{"tavola", "app-workspace", "nova-widget"}
 	// pulls := []github.PullRequests{}
+	// skipPrNames := "val, test"
 	usersFilter := []string{"spinelli-clk"}
 
 	merged := github.PullRequests{}
@@ -29,6 +30,7 @@ func CreatePrCard(trelloClient func(string, string), repos ...string) {
 	fmt.Println("size: ", len(merged))
 
 	for _, pull := range merged {
-		trelloClient(pull.Url, pull.Title)
+		// TODO: Save created cards to a file
+		trelloClient("", pull)
 	}
 }

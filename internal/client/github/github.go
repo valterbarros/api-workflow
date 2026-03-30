@@ -9,13 +9,27 @@ import (
 
 type PullRequest struct {
 	// Keys should be in Capitalized style
-	Url    string
-	Title  string
-	Labels []map[string]any
-	User   struct {
-		Login      string
-		Avatar_url string
-	}
+	Url        string           `json:"url"`
+	Title      string           `json:"title"`
+	Labels     []map[string]any `json:"labels"`
+	Updated_at string           `json:"updated_at"`
+	Draft      bool             `json:"draft"`
+	Number     int              `json:"number"`
+	Links      struct {
+		Self struct {
+			Href string `json:"href"`
+		} `json:"self"`
+	} `json:"_links"`
+	Additions int `json:"additions"`
+	Base      struct {
+		Repo struct {
+			Name string `json:"name"`
+		} `json:"repo"`
+	} `json:"base"`
+	User struct {
+		Login      string `json:"login"`
+		Avatar_url string `json:"avatar_url"`
+	} `json:"user"`
 }
 
 func GetPullRequest(url string) PullRequest {
@@ -82,11 +96,10 @@ func GetReviews(url string) Reviews {
 	req.Header.Set("Accept", "application/vnd.github+json")
 
 	resp, err := client.Do(req)
-	defer resp.Body.Close()
-
 	if err != nil {
 		fmt.Println("error doing the request", err)
 	}
+	defer resp.Body.Close()
 
 	var review Reviews
 	utils.DecodeJson(resp.Body, &review)
@@ -119,11 +132,10 @@ func GetRepos(url string) repos {
 	req.Header.Set("Accept", "application/vnd.github+json")
 
 	resp, err := client.Do(req)
-	defer resp.Body.Close()
-
 	if err != nil {
 		fmt.Println("error doing the request", err)
 	}
+	defer resp.Body.Close()
 
 	var repos repos
 	utils.DecodeJson(resp.Body, &repos)
@@ -153,11 +165,10 @@ func GetPullRequests(url string) PullRequests {
 	req.Header.Set("Accept", "application/vnd.github+json")
 
 	resp, err := client.Do(req)
-	defer resp.Body.Close()
-
 	if err != nil {
 		fmt.Println("error doing the request", err)
 	}
+	defer resp.Body.Close()
 
 	var pullRequests PullRequests
 	utils.DecodeJson(resp.Body, &pullRequests)
