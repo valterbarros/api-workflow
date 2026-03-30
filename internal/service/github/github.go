@@ -87,14 +87,16 @@ func ReviewsResult(url string) ReviewData {
 
 	slices.Reverse(reviews)
 	var me string
-	var notMe = []string{}
+	var result = []string{}
 	var approveCount int
+	var meIndex int
 
-	for _, review := range reviews {
-		// MY APPROVED
+	for idx, review := range reviews {
 		if review.User.Login == MYUSER {
 			me = "ME: " + mapLabel(review)
 			approveCount++
+			result = append(result, me)
+			meIndex = idx
 			continue
 		}
 
@@ -104,26 +106,20 @@ func ReviewsResult(url string) ReviewData {
 			switch review.State {
 			case "APPROVED":
 				approveCount++
-				notMe = append(notMe, firstL+": "+mapLabel(review))
+				result = append(result, firstL+": "+mapLabel(review))
 			case "COMMENTED":
-				notMe = append(notMe, firstL+": "+mapLabel(review))
+				result = append(result, firstL+": "+mapLabel(review))
 			case "DISMISSED":
-				notMe = append(notMe, firstL+": "+mapLabel(review))
+				result = append(result, firstL+": "+mapLabel(review))
 			}
 		}
 	}
 
-	var result = []string{}
-
-	if len(notMe) > 1 {
-		result = notMe[0:2]
-	}
-
-	if me != "" {
-		result = append(result, me)
-	}
-
-	if len(result) < 1 {
+	if len(result) > 0 {
+		// Put me at end of the array
+		lastIndex := len(result) - 1
+		result[meIndex], result[lastIndex] = result[lastIndex], result[meIndex]
+	} else {
 		return ReviewData{"No reviews", "yellow"}
 	}
 
