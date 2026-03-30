@@ -12,9 +12,7 @@ func buildMid(mux *http.ServeMux) func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 
-		// O navegador exige isso para 'loopback' também!
 		w.Header().Set("Access-Control-Allow-Private-Network", "true")
-
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
@@ -37,11 +35,6 @@ func main() {
 	const PORT = "12769"
 
 	mux := http.NewServeMux()
-
-	// Sua rota de exemplo
-	// mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	w.Write([]byte("Conteúdo do Iframe via HTTPS e Go"))
-	// })
 
 	mux.HandleFunc("/reviews", func(w http.ResponseWriter, r *http.Request) {
 		// TODO: pass only the repo and name and pr id

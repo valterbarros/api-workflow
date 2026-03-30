@@ -1,4 +1,4 @@
-package client
+package github
 
 import (
 	"api-workflow/utils"
@@ -7,13 +7,18 @@ import (
 	"os"
 )
 
-type pullRequest struct {
+type PullRequest struct {
 	// Keys should be in Capitalized style
 	Url    string
+	Title  string
 	Labels []map[string]any
+	User   struct {
+		Login      string
+		Avatar_url string
+	}
 }
 
-func GetPullRequest(url string) pullRequest {
+func GetPullRequest(url string) PullRequest {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
 	currentUrl := "https://api.github.com/repos/clicksign/app-workspaces/pulls/162"
@@ -33,13 +38,14 @@ func GetPullRequest(url string) pullRequest {
 	req.Header.Set("Accept", "application/vnd.github+json")
 
 	resp, err := client.Do(req)
-	defer resp.Body.Close()
 
 	if err != nil {
 		fmt.Println("error doing the request", err)
 	}
 
-	var pr pullRequest
+	defer resp.Body.Close()
+
+	var pr PullRequest
 	utils.DecodeJson(resp.Body, &pr)
 
 	return pr
@@ -125,7 +131,7 @@ func GetRepos(url string) repos {
 	return repos
 }
 
-type PullRequests []pullRequest
+type PullRequests []PullRequest
 
 func GetPullRequests(url string) PullRequests {
 	utils.SetEnvFromFile()

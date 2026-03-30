@@ -106,8 +106,11 @@ func ReviewsResult(url string) ReviewData {
 	}
 
 	var text string
-	for k, v := range mapper {
-		text += fmt.Sprintf("%s: %d ", k, v)
+	// Map iteration order is random in Go; use a fixed key order for stable text/tests.
+	for _, k := range []string{"CO", "AP"} {
+		if v := mapper[k]; v > 0 {
+			text += fmt.Sprintf("%s: %d ", k, v)
+		}
 	}
 
 	if len(mapper) == 0 {

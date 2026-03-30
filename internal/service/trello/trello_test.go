@@ -1,0 +1,63 @@
+package trello
+
+import (
+	"api-workflow/utils"
+	"net/http"
+	"net/http/httptest"
+	"reflect"
+	"testing"
+)
+
+type argm map[string]string
+
+var arguments []argm
+
+func mockTrelloClient(url, title string) {
+	arguments = append(arguments, argm{"title": title, "url": url})
+}
+
+func TestCreatePrCard(t *testing.T) {
+	arguments = nil
+
+	ser1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		data := utils.GetFileData(utils.GetFromRoot("fixtures/pull-requests.json"))
+		w.Write([]byte(data))
+	}))
+
+	defer ser1.Close()
+
+	ser2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		data := utils.GetFileData(utils.GetFromRoot("fixtures/pull-requests2.json"))
+		w.Write([]byte(data))
+	}))
+
+	defer ser2.Close()
+
+	CreatePrCard(mockTrelloClient, ser1.URL, ser2.URL)
+
+	expected := []argm{
+		{
+			"title": "[VOP-752] (T2) Configurar fontes do repositório ao subir o container",
+			"url":   "https://api.github.com/repos/clicksign/app-stamped/pulls/48",
+		},
+		{
+			"title": "Add unified Terraform setup for multi-environment support",
+			"url":   "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls/43",
+		},
+		{
+			"title": "[VOP-1129] Add table prefixing support in configuration",
+			"url":   "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls/42",
+		},
+		{
+			"title": "VOP-1129 Provisionar ambiente de staging com DynamoDB, SQS e Lambda",
+			"url":   "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls/38",
+		},
+	}
+
+	if !reflect.DeepEqual(expected, arguments) {
+		t.Errorf("not equal expected: %s arguments %s", expected, arguments)
+	}
+
+}
