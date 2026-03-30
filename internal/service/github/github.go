@@ -2,7 +2,7 @@ package github
 
 import (
 	client "api-workflow/internal/client/github"
-	"math"
+	"fmt"
 	"regexp"
 	"slices"
 	"strings"
@@ -86,46 +86,37 @@ func ReviewsResult(url string) ReviewData {
 	reviews := client.GetReviews(url)
 
 	slices.Reverse(reviews)
-	var me string
-	var result = []string{}
 	var approveCount int
-	var meIndex int
+	var meType string
+	mapper := map[string]int{}
 
-	for idx, review := range reviews {
+	for _, review := range reviews {
 		if review.User.Login == MYUSER {
-			me = "ME: " + mapLabel(review)
-			approveCount++
-			result = append(result, me)
-			meIndex = idx
-			continue
+			meType = mapLabel(review)
 		}
 
-		firstL := strings.ToUpper(string(review.User.Login[0]))
-
-		if review.User.Login != MYUSER {
-			switch review.State {
-			case "APPROVED":
-				approveCount++
-				result = append(result, firstL+": "+mapLabel(review))
-			case "COMMENTED":
-				result = append(result, firstL+": "+mapLabel(review))
-			case "DISMISSED":
-				result = append(result, firstL+": "+mapLabel(review))
-			}
+		switch review.State {
+		case "APPROVED":
+			mapper["AP"]++
+			approveCount++
+		case "COMMENTED":
+			mapper["CO"]++
+		case "DISMISSED":
 		}
 	}
 
-	if len(result) > 0 {
-		// Put me at end of the array
-		lastIndex := len(result) - 1
-		result[meIndex], result[lastIndex] = result[lastIndex], result[meIndex]
-	} else {
+	var text string
+	for k, v := range mapper {
+		text += fmt.Sprintf("%s: %d ", k, v)
+	}
+
+	if len(mapper) == 0 {
 		return ReviewData{"No reviews", "yellow"}
 	}
 
-	size := float64(len(result))
-	start := int(math.Max(size-2, 0))
-	result = result[start:]
+	if meType != "" {
+		text += "ME: " + meType
+	}
 
 	var color string
 	if approveCount > 2 {
@@ -134,7 +125,7 @@ func ReviewsResult(url string) ReviewData {
 		color = "yellow"
 	}
 
-	return ReviewData{strings.Join(result, " "), color}
+	return ReviewData{strings.TrimSpace(text), color}
 }
 
 func mapLabel(review client.User) string {

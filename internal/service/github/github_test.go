@@ -41,7 +41,7 @@ func TestGetVersion(t *testing.T) {
 }
 
 func TestReviewsResult(t *testing.T) {
-	t.Run("when has 16 comments and I approved the pr", func(t *testing.T) {
+	t.Run("when has 16 comments and I dismissed the pr", func(t *testing.T) {
 		ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			// 16 comments
@@ -59,17 +59,13 @@ func TestReviewsResult(t *testing.T) {
 			t.Error("not equal color")
 		}
 
-		if result.Text != "D: CO ME: OK" {
-			t.Error("not equal review data")
+		if result.Text != "CO: 15 AP: 1 ME: DI" {
+			t.Error("not equal review data", result.Text)
 		}
 	})
 	t.Run("when has more than 2 approves", func(t *testing.T) {
 		ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
-			// 14 comments
-			// 3 approved
-			// 0 dismissed
-			// data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews.json"))
 			data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews-approved.json"))
 			w.Write([]byte(data))
 		}))
@@ -82,18 +78,14 @@ func TestReviewsResult(t *testing.T) {
 			t.Error("not equal color")
 		}
 
-		if result.Text != "D: CO ME: OK" {
-			t.Error("not equal review data")
+		if result.Text != "CO: 14 AP: 3 ME: OK" {
+			t.Error("not equal review data", result.Text)
 		}
 	})
 
 	t.Run("when has no reviews", func(t *testing.T) {
 		ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
-			// 14 comments
-			// 3 approved
-			// 0 dismissed
-			// data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews.json"))
 			w.Write([]byte("[]"))
 		}))
 
@@ -110,13 +102,9 @@ func TestReviewsResult(t *testing.T) {
 		}
 	})
 
-	t.Run("when has no reviews", func(t *testing.T) {
+	t.Run("when has only one me review", func(t *testing.T) {
 		ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
-			// 14 comments
-			// 3 approved
-			// 0 dismissed
-			// data := utils.GetFileData(utils.GetFromRoot("fixtures/reviews.json"))
 			w.Write([]byte(`[{"state": "APPROVED", "user": {"login": "valter-clk"}}]`))
 		}))
 
@@ -128,7 +116,7 @@ func TestReviewsResult(t *testing.T) {
 			t.Error("not equal color")
 		}
 
-		if result.Text != "ME: OK" {
+		if result.Text != "AP: 1 ME: OK" {
 			t.Error("not equal review data result:", result.Text)
 		}
 	})
@@ -146,7 +134,7 @@ func TestReviewsResult(t *testing.T) {
 			t.Error("not equal color")
 		}
 
-		if result.Text != "ME: CO" {
+		if result.Text != "CO: 1 ME: CO" {
 			t.Error("not equal review data result:", result.Text)
 		}
 	})

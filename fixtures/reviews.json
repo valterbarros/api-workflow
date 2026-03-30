@@ -27,7 +27,7 @@
       "id": 249334653,
       "login": "valter-clk"
     },
-    "state": "APPROVED"
+    "state": "DISMISSED"
   },
   {
     "id": 4002191442,
@@ -37,7 +37,7 @@
       "id": 175728472,
       "login": "copilot-pull-request-reviewer[bot]"
     },
-    "state": "COMMENTED"
+    "state": "APPROVED"
   },
   {
     "id": 4002339257,
