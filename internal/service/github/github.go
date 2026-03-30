@@ -2,7 +2,6 @@ package github
 
 import (
 	client "api-workflow/internal/client/github"
-	"fmt"
 	"math"
 	"regexp"
 	"slices"
@@ -81,9 +80,9 @@ type ReviewData struct {
 	Color string `json:"color"`
 }
 
-func ReviewsResult(url string) ReviewData {
-	const MYUSER = "valter-clk"
+const MYUSER = "valter-clk"
 
+func ReviewsResult(url string) ReviewData {
 	reviews := client.GetReviews(url)
 
 	slices.Reverse(reviews)
@@ -93,8 +92,8 @@ func ReviewsResult(url string) ReviewData {
 
 	for _, review := range reviews {
 		// MY APPROVED
-		if review.User.Login == MYUSER && review.State == "APPROVED" {
-			me = "ME: OK"
+		if review.User.Login == MYUSER {
+			me = "ME: " + mapLabel(review)
 			approveCount++
 			continue
 		}
@@ -105,13 +104,11 @@ func ReviewsResult(url string) ReviewData {
 			switch review.State {
 			case "APPROVED":
 				approveCount++
-				notMe = append(notMe, firstL+": OK")
+				notMe = append(notMe, firstL+": "+mapLabel(review))
 			case "COMMENTED":
-				notMe = append(notMe, firstL+": CO")
+				notMe = append(notMe, firstL+": "+mapLabel(review))
 			case "DISMISSED":
-				notMe = append(notMe, firstL+": DI")
-			default:
-				fmt.Println("default case")
+				notMe = append(notMe, firstL+": "+mapLabel(review))
 			}
 		}
 	}
@@ -142,4 +139,17 @@ func ReviewsResult(url string) ReviewData {
 	}
 
 	return ReviewData{strings.Join(result, " "), color}
+}
+
+func mapLabel(review client.User) string {
+	switch review.State {
+	case "APPROVED":
+		return "OK"
+	case "COMMENTED":
+		return "CO"
+	case "DISMISSED":
+		return "DI"
+	default:
+		return ""
+	}
 }

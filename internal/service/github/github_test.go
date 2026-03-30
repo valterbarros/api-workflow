@@ -132,4 +132,22 @@ func TestReviewsResult(t *testing.T) {
 			t.Error("not equal review data result:", result.Text)
 		}
 	})
+	t.Run("when has one my comment", func(t *testing.T) {
+		ser := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`[{"state": "COMMENTED", "user": {"login": "valter-clk"}}]`))
+		}))
+
+		defer ser.Close()
+
+		result := ReviewsResult(ser.URL)
+
+		if result.Color != "yellow" {
+			t.Error("not equal color")
+		}
+
+		if result.Text != "ME: CO" {
+			t.Error("not equal review data result:", result.Text)
+		}
+	})
 }
