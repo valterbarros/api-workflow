@@ -16,49 +16,23 @@ type _pullRequest struct {
 	Labels []map[string]any
 }
 
+type TrelloClient struct {
+	BoardId string `default:"623ca78014f837744b044573"`
+	BaseUrl string `default:"https://api.trello.com/1"`
+}
+
 const BASE_URL = "https://api.trello.com/1"
 const DOING_LIST_ID = "623ca78014f837744b044577"
+const BOARD_ID = "623ca78014f837744b044573"
 const TAVOLA_LABEL_ID = "649cdc411b86084babfb4605"
 
-func CreateCard(urlPath string, pr github.PullRequest) {
+func (t *TrelloClient) CreateCard(pr github.PullRequest) {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
-	currentUrl := BASE_URL + "/cards"
-
-	if urlPath != "" {
-		currentUrl = urlPath
-	}
+	currentUrl := t.BaseUrl + "/cards"
 
 	token := os.Getenv("TRELLO_TOKEN")
 	key := os.Getenv("TRELLO_KEY")
-
-	// const pullRequestApiUrl = pullRequest.url;
-	// const userName = pullRequest.user.login;
-	// const updatedPr = pullRequest.updated_at;
-	// const splittedUrl = pullRequestUrl.split('/');
-	// const prNumber = splittedUrl[splittedUrl.length - 1];
-	// const cardTitle = pullRequest.title;
-	// const repoName = pullRequest.base.repo.name;
-	// const hasReadtyToReview = pullRequest.labels.find(({ name }) => name.includes('review'));
-	// const isDraft = pullRequest.draft;
-
-	// const { additions } = await gitHubRequest(pullRequestApiUrl, githubUserInfo.ghToken);
-
-	// const { id: boardId } = await t.board('id');
-
-	// const userLabelId = await getLabelId(boardId, userName);
-	// const repoLabelId = await getLabelId(boardId, repoName);
-	// const readyToReviewLabelId = await getLabelId(boardId, 'ready to review');
-	// const idLabels = [userLabelId, repoLabelId].filter(Boolean);
-
-	// if (hasReadtyToReview && readyToReviewLabelId && isDraft) idLabels.push(readyToReviewLabelId);
-
-	// const createCardParams = {
-	// 	name: `${cardTitle} [${repoName}] [${userName}] #${prNumber} [${formatDate(updatedPr)}] [a: ${additions}]`,
-	// 	idList: listBoardId,
-	// 	...( idLabels.length && { idLabels: idLabels.join(',') }),
-	// 	pos: "top",
-	// };
 
 	data := url.Values{}
 	data.Set("key", key)
@@ -71,6 +45,8 @@ func CreateCard(urlPath string, pr github.PullRequest) {
 	data.Set("name", name)
 	data.Set("idList", DOING_LIST_ID)
 	data.Set("pos", "top")
+	labels := []string{t.GetLabelId(pullRequest.User.Login), t.GetLabelId(pullRequest.Base.Repo.Name)}
+	data.Set("idLabels", strings.Join(labels, ","))
 
 	req, err := http.NewRequest("POST", currentUrl, strings.NewReader(data.Encode()))
 	if err != nil {
@@ -89,3 +65,58 @@ func CreateCard(urlPath string, pr github.PullRequest) {
 
 	defer resp.Body.Close()
 }
+
+type Label struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// simple cache label
+var labels []Label
+
+func (t *TrelloClient) GetLabelId(labelName string) string {
+	if len(labels) > 0 {
+		return findLabel(labelName).Id
+	}
+
+	utils.SetEnvFromFile()
+	client := &http.Client{}
+	currentUrl := t.BaseUrl + "/boards/" + t.BoardId + "/labels"
+
+	data := url.Values{}
+	data.Set("key", os.Getenv("TRELLO_KEY"))
+	data.Set("token", os.Getenv("TRELLO_TOKEN"))
+
+	req, err := http.NewRequest("GET", currentUrl+"?"+data.Encode(), nil)
+	if err != nil {
+		fmt.Println("error creating the request", err)
+		return ""
+	}
+
+	req.Header.Set("User-Agent", "Go-HTTP-Client")
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("error doing the request", err)
+		return ""
+	}
+
+	defer resp.Body.Close()
+
+	utils.DecodeJson(resp.Body, &labels)
+
+	return findLabel(labelName).Id
+}
+
+func findLabel(labelName string) Label {
+	for _, label := range labels {
+		if strings.ToLower(label.Name) == strings.ToLower(labelName) {
+			return label
+		}
+	}
+	return Label{}
+}
+
+// TODO: Create attachment to card
+// func CreateAttachment(urlPath string, pr github.PullRequest) {}

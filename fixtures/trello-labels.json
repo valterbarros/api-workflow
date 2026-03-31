@@ -1,0 +1,317 @@
+[
+  {
+      "id": "623ca78114f837744b0446c3",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "6 - Approved",
+      "color": "blue",
+      "uses": 945
+  },
+  {
+      "id": "649cdc411b86084babfb4605",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - Tavola",
+      "color": "orange_dark",
+      "uses": 849
+  },
+  {
+      "id": "634025e0ffa27e01099a1796",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Samuel (Hai-San)",
+      "color": "black_light",
+      "uses": 700
+  },
+  {
+      "id": "649ceb7fdf8f51e9b80b3945",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - nova-widget",
+      "color": "orange_dark",
+      "uses": 455
+  },
+  {
+      "id": "649ceb886f4b7ea8b272e1e4",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - excalibur",
+      "color": "orange_dark",
+      "uses": 433
+  },
+  {
+      "id": "623ca9293eec225d10167f80",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Bob (eaebob)",
+      "color": "black_light",
+      "uses": 186
+  },
+  {
+      "id": "648c683e863d1d68755096b1",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Dantas (victordantasmcz)",
+      "color": "black_light",
+      "uses": 179
+  },
+  {
+      "id": "630e2834e725610319261037",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - nathansouza-clk (nathan)",
+      "color": "black_light",
+      "uses": 137
+  },
+  {
+      "id": "67a36a292ed07374557b494c",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "document-validator",
+      "color": "orange_dark",
+      "uses": 107
+  },
+  {
+      "id": "631a28a5b0424d00a1137ed2",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Laercio (laerciodev)",
+      "color": "black_light",
+      "uses": 77
+  },
+  {
+      "id": "667c23817395169fe02ee9b5",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - vtdog",
+      "color": "black_light",
+      "uses": 74
+  },
+  {
+      "id": "63514218aa92db003b990976",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - giovanibl",
+      "color": "black_light",
+      "uses": 66
+  },
+  {
+      "id": "690a6d7d79a88b1ba775a0dc",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - app-workspaces",
+      "color": "orange_dark",
+      "uses": 63
+  },
+  {
+      "id": "6400fb851caf57c65c403743",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Torrubia (ViniciusTOG)",
+      "color": "black_light",
+      "uses": 58
+  },
+  {
+      "id": "633723ca4765280397f3649a",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Elian (elianbatista)",
+      "color": "black_light",
+      "uses": 33
+  },
+  {
+      "id": "69a9c27b599ce83a5a6a885e",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Josafa(joclicker)",
+      "color": "black_light",
+      "uses": 28
+  },
+  {
+      "id": "630e282639f9ba049add83d1",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "8 - Checked",
+      "color": "lime",
+      "uses": 25
+  },
+  {
+      "id": "698609e105d85ca08027af26",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - app-envelope-finalizer-service",
+      "color": "orange_dark",
+      "uses": 24
+  },
+  {
+      "id": "699645c54065d18addc25b49",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - danilojosino (Josino)",
+      "color": "black_light",
+      "uses": 23
+  },
+  {
+      "id": "623ca78114f837744b0446b7",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "5 - With comments",
+      "color": "purple",
+      "uses": 19
+  },
+  {
+      "id": "623ca931780b363568cf985a",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Chico (franciscoemanuel)",
+      "color": "black_light",
+      "uses": 13
+  },
+  {
+      "id": "623ca78114f837744b0446c0",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Not approved",
+      "color": "black",
+      "uses": 8
+  },
+  {
+      "id": "698dde0e3a9e37abde8af49f",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - app-stamped",
+      "color": "orange_dark",
+      "uses": 8
+  },
+  {
+      "id": "623ca78114f837744b0446ea",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - On hold",
+      "color": "orange",
+      "uses": 7
+  },
+  {
+      "id": "626c26f679296643dfa9a542",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Draft",
+      "color": "black_light",
+      "uses": 6
+  },
+  {
+      "id": "68adb5e8fe7bd618483760a8",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - Documentação",
+      "color": "orange_dark",
+      "uses": 5
+  },
+  {
+      "id": "623ca78114f837744b0446cc",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "2 - To deploy",
+      "color": "yellow",
+      "uses": 4
+  },
+  {
+      "id": "636be6a1d70b0405324b24fa",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - lucaspagliari",
+      "color": "black_light",
+      "uses": 3
+  },
+  {
+      "id": "649cf08a2da03f4d9d806eab",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - Midas (billing-service)",
+      "color": "orange_dark",
+      "uses": 3
+  },
+  {
+      "id": "6889189498109b010b44c0a0",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "7 - PR review",
+      "color": "sky",
+      "uses": 2
+  },
+  {
+      "id": "66217b9200748120ed7ce3dd",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - Ds-icons",
+      "color": "orange_dark",
+      "uses": 2
+  },
+  {
+      "id": "623ca9393eaede86899dd687",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Otaide (otaneto)",
+      "color": "black_light",
+      "uses": 2
+  },
+  {
+      "id": "6308cce829355101ebeb1425",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Deyvin",
+      "color": "black_light",
+      "uses": 2
+  },
+  {
+      "id": "626fd35c64d0b23b6446dffa",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "5 - On Qa",
+      "color": "purple",
+      "uses": 2
+  },
+  {
+      "id": "62d7ff34c4a41c75cc2c1062",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Tofoli (tofoli)",
+      "color": "black_light",
+      "uses": 1
+  },
+  {
+      "id": "631f2f3e6b4508031b1f2b71",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Mersonff",
+      "color": "black",
+      "uses": 1
+  },
+  {
+      "id": "62d8674d42c7e847f08f8b98",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "5 - PR review",
+      "color": "purple",
+      "uses": 1
+  },
+  {
+      "id": "623ca78114f837744b0446e7",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - On Dependency",
+      "color": "black",
+      "uses": 1
+  },
+  {
+      "id": "623ca78114f837744b0446bd",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Waiting Dependency",
+      "color": "black",
+      "uses": 1
+  },
+  {
+      "id": "67585978e2a22a911b863946",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Candido",
+      "color": "black_light",
+      "uses": 1
+  },
+  {
+      "id": "62879b6c7c718a05b4008fbd",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Lucas (lsantosc)",
+      "color": "black_light",
+      "uses": 1
+  },
+  {
+      "id": "688918c347aa76e0cfc2597c",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "3 - Terceiros",
+      "color": "orange",
+      "uses": 1
+  },
+  {
+      "id": "62a09c0c33498b119c556c50",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "0 - Ribas (victorbribas)",
+      "color": "black_light",
+      "uses": 1
+  },
+  {
+      "id": "62d95128e07ee6188ffe7297",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "2 - Checar",
+      "color": "yellow",
+      "uses": 0
+  },
+  {
+      "id": "62c5be40f18f7d3dead4f5aa",
+      "idBoard": "623ca78014f837744b044573",
+      "name": "2 - To review",
+      "color": "yellow",
+      "uses": 0
+  }
+]

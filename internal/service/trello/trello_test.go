@@ -63,8 +63,42 @@ func TestCreatePrCard(t *testing.T) {
 			t.Errorf("not equal expected: %s arguments %s", expected, arguments)
 		}
 	})
-	t.Run("should create real cards", func(t *testing.T) {
+	t.Run("should create real cards1", func(t *testing.T) {
 		// real test
-		CreatePrCard(trello.CreateCard, "https://api.github.com/repos/clicksign/app-stamped/pulls", "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls")
+		tc := trello.TrelloClient{
+			BaseUrl: "",
+			BoardId: "",
+		}
+
+		tc.CreateCard(github.PullRequest{
+			Url: "https://api.github.com/repos/clicksign/app-stamped/pulls",
+		})
 	})
+}
+
+func TestGetLabelId(t *testing.T) {
+	ser1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		data := utils.GetFileData(utils.GetFromRoot("fixtures/trello-labels.json"))
+		w.Write([]byte(data))
+	}))
+
+	tc := trello.TrelloClient{
+		BoardId: "623ca78014f837744b044573",
+		BaseUrl: ser1.URL,
+	}
+
+	labelId1 := tc.GetLabelId("3 - tavola")
+
+	ser1.Close()
+
+	if labelId1 == "" {
+		t.Error("labelId is empty", labelId1)
+	}
+
+	labelId2 := tc.GetLabelId("3 - tavola")
+
+	if labelId2 == "" {
+		t.Error("not cached labelId", labelId2)
+	}
 }
