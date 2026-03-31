@@ -59,6 +59,7 @@ func (t *TrelloClient) CreateCard(pr github.PullRequest) {
 	data.Set("pos", "top")
 	labels := t.GetLabelId(pullRequest.User.Login, pullRequest.Base.Repo.Name)
 	data.Set("idLabels", strings.Join(labels, ","))
+	// add pr as attachment
 
 	req, err := http.NewRequest("POST", currentUrl, strings.NewReader(data.Encode()))
 	if err != nil {

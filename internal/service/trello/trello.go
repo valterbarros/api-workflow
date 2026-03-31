@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func CreatePrCard(trelloClient trello.TrelloClientInterface, repos ...string) {
+func CreatePrCard(trelloClient trello.TrelloClientInterface, users []string, repos ...string) {
 	// List all prs from all repos selecteds
 	// For each create a new trello card with title = gh title
 	// TODO: comes from request
@@ -16,7 +16,7 @@ func CreatePrCard(trelloClient trello.TrelloClientInterface, repos ...string) {
 	// pulls := []github.PullRequests{}
 	// skipPrNames := "val, test"
 	// usersFilter := []string{"joclicker"}
-	usersFilter := []string{"spinelli-clk"}
+	usersFilter := users
 
 	createdPrs := utils.GetFileData(utils.GetFromRoot("internal/storage/created_prs.txt"))
 

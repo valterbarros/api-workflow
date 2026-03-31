@@ -52,7 +52,7 @@ func TestCreatePrCard(t *testing.T) {
 
 		defer ser2.Close()
 
-		CreatePrCard(&tcm, ser1.URL, ser2.URL)
+		CreatePrCard(&tcm, []string{"spinelli-clk"}, ser1.URL, ser2.URL)
 
 		expected := []argm{
 			{
@@ -83,7 +83,7 @@ func TestCreatePrCard(t *testing.T) {
 			BoardId: "623ca78014f837744b044573",
 			BaseUrl: "https://api.trello.com/1",
 		}
-		CreatePrCard(&tc, "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls")
+		CreatePrCard(&tc, []string{"spinelli-clk"}, "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls")
 
 		t.Error("not implemented")
 	})

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestCreatePrCards(t *testing.T) {
+func TestCreateCard(t *testing.T) {
 	// TODO
 }
 
