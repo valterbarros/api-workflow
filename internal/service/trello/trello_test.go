@@ -28,6 +28,7 @@ func (m *mockTrelloClient) GetLabelId(searches ...string) []string {
 }
 
 var trelloService = TrelloService{
+	storagePath: "tmp/created_prs.txt",
 	trelloClient: &mockTrelloClient{
 		BaseUrl: "",
 		BoardId: "",
@@ -79,6 +80,25 @@ func TestCreatePrCard(t *testing.T) {
 			t.Errorf("not equal expected: %s arguments %s", expected, arguments)
 		}
 	})
+	t.Run("should not create card twice when already has on storage", func(t *testing.T) {
+		utils.ResetFile(utils.GetFromRoot(trelloService.storagePath))
+		// one pr of fixtures/pull-requests2.json
+		utils.SaveFile(utils.GetFromRoot(trelloService.storagePath), "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls/43\n")
+
+		ser1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			data := utils.GetFileData(utils.GetFromRoot("fixtures/pull-requests2.json"))
+			w.Write([]byte(data))
+		}))
+
+		defer ser1.Close()
+
+		arguments = nil
+		trelloService.CreatePrCard([]string{"spinelli-clk"}, ser1.URL)
+		if len(arguments) > 2 {
+			t.Errorf("expected 1 card, got %d", len(arguments))
+		}
+	})
 	t.Run("should create real cards", func(t *testing.T) {
 		// real test
 		var tc = trello.TrelloClient{
@@ -90,5 +110,4 @@ func TestCreatePrCard(t *testing.T) {
 
 		t.Error("not implemented")
 	})
-	// t.Run("Check for not pull same pr twice")
 }

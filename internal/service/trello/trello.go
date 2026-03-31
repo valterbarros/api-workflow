@@ -10,6 +10,7 @@ import (
 
 type TrelloService struct {
 	trelloClient trello.TrelloClientInterface
+	storagePath  string `default:"internal/storage/created_prs.txt"`
 }
 
 func (t *TrelloService) CreatePrCard(users []string, repos ...string) {
@@ -22,7 +23,7 @@ func (t *TrelloService) CreatePrCard(users []string, repos ...string) {
 	// usersFilter := []string{"joclicker"}
 	usersFilter := users
 
-	createdPrs := utils.GetFileData(utils.GetFromRoot("internal/storage/created_prs.txt"))
+	createdPrs := utils.GetFileData(utils.GetFromRoot(t.storagePath))
 
 	merged := github.PullRequests{}
 
@@ -45,5 +46,5 @@ func (t *TrelloService) CreatePrCard(users []string, repos ...string) {
 		newPrs.WriteString(pull.Url + "\n")
 	}
 
-	utils.SaveFile(utils.GetFromRoot("internal/storage/created_prs.txt"), newPrs.String())
+	utils.SaveFile(utils.GetFromRoot(t.storagePath), newPrs.String())
 }
