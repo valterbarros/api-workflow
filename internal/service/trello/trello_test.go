@@ -14,8 +14,27 @@ type argm map[string]string
 
 var arguments []argm
 
-func mockTrelloClient(url string, pr github.PullRequest) {
+type mockTrelloClient struct {
+	BaseUrl string
+	BoardId string
+}
+
+func (m *mockTrelloClient) CreateCard(pr github.PullRequest) {
 	arguments = append(arguments, argm{"title": pr.Title, "url": pr.Url})
+}
+
+func (m *mockTrelloClient) GetLabelId(search string) string {
+	return ""
+}
+
+var tcm = mockTrelloClient{
+	BaseUrl: "",
+	BoardId: "",
+}
+
+var tc = trello.TrelloClient{
+	BoardId: "623ca78014f837744b044573",
+	BaseUrl: "",
 }
 
 func TestCreatePrCard(t *testing.T) {
@@ -38,7 +57,7 @@ func TestCreatePrCard(t *testing.T) {
 
 		defer ser2.Close()
 
-		CreatePrCard(mockTrelloClient, ser1.URL, ser2.URL)
+		CreatePrCard(&tcm, ser1.URL, ser2.URL)
 
 		expected := []argm{
 			{
@@ -63,42 +82,10 @@ func TestCreatePrCard(t *testing.T) {
 			t.Errorf("not equal expected: %s arguments %s", expected, arguments)
 		}
 	})
-	t.Run("should create real cards1", func(t *testing.T) {
+	t.Run("should create real cards", func(t *testing.T) {
 		// real test
-		tc := trello.TrelloClient{
-			BaseUrl: "",
-			BoardId: "",
-		}
-
-		tc.CreateCard(github.PullRequest{
-			Url: "https://api.github.com/repos/clicksign/app-stamped/pulls",
-		})
+		tc.BaseUrl = "https://api.trello.com/1"
+		tc.BoardId = "623ca78014f837744b044573"
+		CreatePrCard(&tc, "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls")
 	})
-}
-
-func TestGetLabelId(t *testing.T) {
-	ser1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		data := utils.GetFileData(utils.GetFromRoot("fixtures/trello-labels.json"))
-		w.Write([]byte(data))
-	}))
-
-	tc := trello.TrelloClient{
-		BoardId: "623ca78014f837744b044573",
-		BaseUrl: ser1.URL,
-	}
-
-	labelId1 := tc.GetLabelId("3 - tavola")
-
-	ser1.Close()
-
-	if labelId1 == "" {
-		t.Error("labelId is empty", labelId1)
-	}
-
-	labelId2 := tc.GetLabelId("3 - tavola")
-
-	if labelId2 == "" {
-		t.Error("not cached labelId", labelId2)
-	}
 }

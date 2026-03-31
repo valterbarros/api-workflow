@@ -2,17 +2,19 @@ package trello
 
 import (
 	"api-workflow/internal/client/github"
+	"api-workflow/internal/client/trello"
 	"fmt"
 	"slices"
 )
 
-func CreatePrCard(trelloClient func(string, github.PullRequest), repos ...string) {
+func CreatePrCard(trelloClient trello.TrelloClientInterface, repos ...string) {
 	// List all prs from all repos selecteds
 	// For each create a new trello card with title = gh title
 	// TODO: comes from request
 	// repos := []string{"tavola", "app-workspace", "nova-widget"}
 	// pulls := []github.PullRequests{}
 	// skipPrNames := "val, test"
+	// usersFilter := []string{"joclicker"}
 	usersFilter := []string{"spinelli-clk"}
 
 	merged := github.PullRequests{}
@@ -31,6 +33,6 @@ func CreatePrCard(trelloClient func(string, github.PullRequest), repos ...string
 
 	for _, pull := range merged {
 		// TODO: Save created cards to a file
-		trelloClient("", pull)
+		trelloClient.CreateCard(pull)
 	}
 }

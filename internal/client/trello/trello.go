@@ -16,6 +16,11 @@ type _pullRequest struct {
 	Labels []map[string]any
 }
 
+type TrelloClientInterface interface {
+	CreateCard(pr github.PullRequest)
+	GetLabelId(search string) string
+}
+
 type TrelloClient struct {
 	BoardId string `default:"623ca78014f837744b044573"`
 	BaseUrl string `default:"https://api.trello.com/1"`
@@ -74,9 +79,9 @@ type Label struct {
 // simple cache label
 var labels []Label
 
-func (t *TrelloClient) GetLabelId(labelName string) string {
+func (t *TrelloClient) GetLabelId(search string) string {
 	if len(labels) > 0 {
-		return findLabel(labelName).Id
+		return findLabel(search).Id
 	}
 
 	utils.SetEnvFromFile()
@@ -106,12 +111,12 @@ func (t *TrelloClient) GetLabelId(labelName string) string {
 
 	utils.DecodeJson(resp.Body, &labels)
 
-	return findLabel(labelName).Id
+	return findLabel(search).Id
 }
 
-func findLabel(labelName string) Label {
+func findLabel(search string) Label {
 	for _, label := range labels {
-		if strings.ToLower(label.Name) == strings.ToLower(labelName) {
+		if strings.Contains(strings.ToLower(label.Name), strings.ToLower(search)) {
 			return label
 		}
 	}
