@@ -3,8 +3,9 @@ package trello
 import (
 	"api-workflow/internal/client/github"
 	"api-workflow/internal/client/trello"
-	"fmt"
+	"api-workflow/utils"
 	"slices"
+	"strings"
 )
 
 func CreatePrCard(trelloClient trello.TrelloClientInterface, repos ...string) {
@@ -17,6 +18,8 @@ func CreatePrCard(trelloClient trello.TrelloClientInterface, repos ...string) {
 	// usersFilter := []string{"joclicker"}
 	usersFilter := []string{"spinelli-clk"}
 
+	createdPrs := utils.GetFileData(utils.GetFromRoot("internal/storage/created_prs.txt"))
+
 	merged := github.PullRequests{}
 
 	for _, repo := range repos {
@@ -24,15 +27,19 @@ func CreatePrCard(trelloClient trello.TrelloClientInterface, repos ...string) {
 		pulls := github.GetPullRequests(repo)
 		// filters
 		pulls = slices.DeleteFunc(pulls, func(p github.PullRequest) bool {
-			return !slices.Contains(usersFilter, p.User.Login)
+			return !slices.Contains(usersFilter, p.User.Login) || strings.Contains(createdPrs, p.Url)
 		})
 		merged = append(merged, pulls...)
 	}
 
-	fmt.Println("size: ", len(merged))
+	var newPrs = strings.Builder{}
+	newPrs.WriteString(createdPrs)
 
 	for _, pull := range merged {
 		// TODO: Save created cards to a file
 		trelloClient.CreateCard(pull)
+		newPrs.WriteString(pull.Url + "\n")
 	}
+
+	utils.SaveFile(utils.GetFromRoot("internal/storage/created_prs.txt"), newPrs.String())
 }

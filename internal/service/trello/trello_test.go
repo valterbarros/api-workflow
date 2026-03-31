@@ -23,18 +23,13 @@ func (m *mockTrelloClient) CreateCard(pr github.PullRequest) {
 	arguments = append(arguments, argm{"title": pr.Title, "url": pr.Url})
 }
 
-func (m *mockTrelloClient) GetLabelId(search string) string {
-	return ""
+func (m *mockTrelloClient) GetLabelId(searches ...string) []string {
+	return []string{}
 }
 
 var tcm = mockTrelloClient{
 	BaseUrl: "",
 	BoardId: "",
-}
-
-var tc = trello.TrelloClient{
-	BoardId: "623ca78014f837744b044573",
-	BaseUrl: "",
 }
 
 func TestCreatePrCard(t *testing.T) {
@@ -84,8 +79,13 @@ func TestCreatePrCard(t *testing.T) {
 	})
 	t.Run("should create real cards", func(t *testing.T) {
 		// real test
-		tc.BaseUrl = "https://api.trello.com/1"
-		tc.BoardId = "623ca78014f837744b044573"
+		var tc = trello.TrelloClient{
+			BoardId: "623ca78014f837744b044573",
+			BaseUrl: "https://api.trello.com/1",
+		}
 		CreatePrCard(&tc, "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls")
+
+		t.Error("not implemented")
 	})
+	// t.Run("Check for not pull same pr twice")
 }

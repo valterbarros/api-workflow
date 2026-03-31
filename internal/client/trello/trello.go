@@ -18,7 +18,7 @@ type _pullRequest struct {
 
 type TrelloClientInterface interface {
 	CreateCard(pr github.PullRequest)
-	GetLabelId(search string) string
+	GetLabelId(searches ...string) []string
 }
 
 type TrelloClient struct {
@@ -29,9 +29,16 @@ type TrelloClient struct {
 const BASE_URL = "https://api.trello.com/1"
 const DOING_LIST_ID = "623ca78014f837744b044577"
 const BOARD_ID = "623ca78014f837744b044573"
-const TAVOLA_LABEL_ID = "649cdc411b86084babfb4605"
+
+// const TAVOLA_LABEL_ID = "649cdc411b86084babfb4605"
 
 func (t *TrelloClient) CreateCard(pr github.PullRequest) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("error creating the card", r)
+		}
+	}()
+
 	utils.SetEnvFromFile()
 	client := &http.Client{}
 	currentUrl := t.BaseUrl + "/cards"
@@ -50,7 +57,7 @@ func (t *TrelloClient) CreateCard(pr github.PullRequest) {
 	data.Set("name", name)
 	data.Set("idList", DOING_LIST_ID)
 	data.Set("pos", "top")
-	labels := []string{t.GetLabelId(pullRequest.User.Login), t.GetLabelId(pullRequest.Base.Repo.Name)}
+	labels := t.GetLabelId(pullRequest.User.Login, pullRequest.Base.Repo.Name)
 	data.Set("idLabels", strings.Join(labels, ","))
 
 	req, err := http.NewRequest("POST", currentUrl, strings.NewReader(data.Encode()))
@@ -79,9 +86,9 @@ type Label struct {
 // simple cache label
 var labels []Label
 
-func (t *TrelloClient) GetLabelId(search string) string {
+func (t *TrelloClient) GetLabelId(searches ...string) []string {
 	if len(labels) > 0 {
-		return findLabel(search).Id
+		return findLabels(labels, searches)
 	}
 
 	utils.SetEnvFromFile()
@@ -95,7 +102,7 @@ func (t *TrelloClient) GetLabelId(search string) string {
 	req, err := http.NewRequest("GET", currentUrl+"?"+data.Encode(), nil)
 	if err != nil {
 		fmt.Println("error creating the request", err)
-		return ""
+		return []string{}
 	}
 
 	req.Header.Set("User-Agent", "Go-HTTP-Client")
@@ -104,23 +111,26 @@ func (t *TrelloClient) GetLabelId(search string) string {
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println("error doing the request", err)
-		return ""
+		return []string{}
 	}
 
 	defer resp.Body.Close()
 
 	utils.DecodeJson(resp.Body, &labels)
 
-	return findLabel(search).Id
+	return findLabels(labels, searches)
 }
 
-func findLabel(search string) Label {
-	for _, label := range labels {
-		if strings.Contains(strings.ToLower(label.Name), strings.ToLower(search)) {
-			return label
+func findLabels(labelsToSearch []Label, searches []string) []string {
+	foundLabels := []string{}
+	for _, label := range labelsToSearch {
+		for _, search := range searches {
+			if strings.Contains(strings.ToLower(label.Name), strings.ToLower(search)) {
+				foundLabels = append(foundLabels, label.Id)
+			}
 		}
 	}
-	return Label{}
+	return foundLabels
 }
 
 // TODO: Create attachment to card

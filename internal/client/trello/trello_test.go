@@ -23,17 +23,17 @@ func TestGetLabelId(t *testing.T) {
 		BaseUrl: ser1.URL,
 	}
 
-	labelId1 := tc.GetLabelId("3 - tavola")
+	labelIds := tc.GetLabelId("tavola", "nova-widget")
 
 	ser1.Close()
 
-	if labelId1 == "" {
-		t.Error("labelId is empty", labelId1)
+	if len(labelIds) < 2 {
+		t.Error("labelId is incomplete", labelIds)
 	}
 
-	labelId2 := tc.GetLabelId("3 - tavola")
+	labelIds2 := tc.GetLabelId("tavola")
 
-	if labelId2 == "" {
-		t.Error("not cached labelId", labelId2)
+	if len(labelIds2) < 1 {
+		t.Error("not cached labelId", labelIds2)
 	}
 }
