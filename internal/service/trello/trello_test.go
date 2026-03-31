@@ -27,9 +27,11 @@ func (m *mockTrelloClient) GetLabelId(searches ...string) []string {
 	return []string{}
 }
 
-var tcm = mockTrelloClient{
-	BaseUrl: "",
-	BoardId: "",
+var trelloService = TrelloService{
+	trelloClient: &mockTrelloClient{
+		BaseUrl: "",
+		BoardId: "",
+	},
 }
 
 func TestCreatePrCard(t *testing.T) {
@@ -52,7 +54,7 @@ func TestCreatePrCard(t *testing.T) {
 
 		defer ser2.Close()
 
-		CreatePrCard(&tcm, []string{"spinelli-clk"}, ser1.URL, ser2.URL)
+		trelloService.CreatePrCard([]string{"spinelli-clk"}, ser1.URL, ser2.URL)
 
 		expected := []argm{
 			{
@@ -83,7 +85,8 @@ func TestCreatePrCard(t *testing.T) {
 			BoardId: "623ca78014f837744b044573",
 			BaseUrl: "https://api.trello.com/1",
 		}
-		CreatePrCard(&tc, []string{"spinelli-clk"}, "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls")
+		trelloService.trelloClient = &tc
+		trelloService.CreatePrCard([]string{"spinelli-clk"}, "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls")
 
 		t.Error("not implemented")
 	})

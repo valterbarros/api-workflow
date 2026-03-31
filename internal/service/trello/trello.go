@@ -8,7 +8,11 @@ import (
 	"strings"
 )
 
-func CreatePrCard(trelloClient trello.TrelloClientInterface, users []string, repos ...string) {
+type TrelloService struct {
+	trelloClient trello.TrelloClientInterface
+}
+
+func (t *TrelloService) CreatePrCard(users []string, repos ...string) {
 	// List all prs from all repos selecteds
 	// For each create a new trello card with title = gh title
 	// TODO: comes from request
@@ -37,7 +41,7 @@ func CreatePrCard(trelloClient trello.TrelloClientInterface, users []string, rep
 
 	for _, pull := range merged {
 		// TODO: Save created cards to a file
-		trelloClient.CreateCard(pull)
+		t.trelloClient.CreateCard(pull)
 		newPrs.WriteString(pull.Url + "\n")
 	}
 
