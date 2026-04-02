@@ -15,6 +15,7 @@ type PullRequest struct {
 	Updated_at string           `json:"updated_at"`
 	Draft      bool             `json:"draft"`
 	Number     int              `json:"number"`
+	Html_url   string           `json:"html_url"`
 	Links      struct {
 		Self struct {
 			Href string `json:"href"`

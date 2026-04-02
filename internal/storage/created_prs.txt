@@ -11,3 +11,5 @@ https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls/40
 https://api.github.com/repos/clicksign/app-stamped/pulls/45
 https://api.github.com/repos/clicksign/app-stamped/pulls/44
 https://api.github.com/repos/clicksign/app-stamped/pulls/43
+https://api.github.com/repos/clicksign/tavola/pulls/14793
+https://api.github.com/repos/clicksign/nova-widget/pulls/677

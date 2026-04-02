@@ -16,6 +16,11 @@ type _pullRequest struct {
 	Labels []map[string]any
 }
 
+type Card struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
 type TrelloClientInterface interface {
 	CreateCard(listId string, pr github.PullRequest)
 	GetLabelId(searches ...string) []string
@@ -72,6 +77,10 @@ func (t *TrelloClient) CreateCard(listId string, pr github.PullRequest) {
 	req.Header.Set("Accept", "application/json")
 
 	resp, err := client.Do(req)
+
+	var card Card
+	utils.DecodeJson(resp.Body, &card)
+	go t.CreateAttachment(pr.Html_url, card.Id)
 
 	if err != nil {
 		fmt.Println("error doing the request", err)
@@ -135,5 +144,37 @@ func findLabels(labelsToSearch []Label, searches []string) []string {
 	return foundLabels
 }
 
-// TODO: Create attachment to card
-// func CreateAttachment(urlPath string, pr github.PullRequest) {}
+func (t *TrelloClient) CreateAttachment(urlPr string, cardId string) {
+	fmt.Println("creating attachment for", urlPr, "and", cardId)
+	utils.SetEnvFromFile()
+	client := &http.Client{}
+	currentUrl := t.BaseUrl + "/card/" + cardId + "/attachments"
+
+	data := url.Values{
+		"key":   {os.Getenv("TRELLO_KEY")},
+		"token": {os.Getenv("TRELLO_TOKEN")},
+		"name":  {"Pull Request"},
+		"url":   {urlPr},
+	}
+
+	req, err := http.NewRequest("POST", currentUrl, strings.NewReader(data.Encode()))
+
+	if err != nil {
+		fmt.Println("error creating the request", err)
+	}
+
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("User-Agent", "Go-HTTP-Client")
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("error doing the request", err)
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode > 299 {
+		fmt.Println("error creating the attachment", resp.StatusCode)
+	}
+}
