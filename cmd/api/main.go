@@ -1,10 +1,13 @@
 package main
 
 import (
+	"api-workflow/internal/client/trello"
 	"api-workflow/internal/service/github"
+	trelloService "api-workflow/internal/service/trello"
 	"api-workflow/utils"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func buildMid(mux *http.ServeMux) func(w http.ResponseWriter, r *http.Request) {
@@ -31,10 +34,44 @@ func getPullRequests(w http.ResponseWriter, r *http.Request) {
 	utils.EncodeJson(w, items)
 }
 
+// url: /sync_cards?listId=623ca78014f837744b044577&users=spinelli-clk&repos=https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls
+func syncCards(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	boardId := r.URL.Query().Get("board_id")
+
+	trelloService := trelloService.TrelloService{
+		StoragePath:   "internal/storage/created_prs.txt",
+		GithubBaseUrl: "https://api.github.com",
+		TrelloClient: &trello.TrelloClient{
+			BoardId: boardId,
+			BaseUrl: "https://api.trello.com/1",
+		},
+	}
+
+	listId := r.URL.Query().Get("list_id")
+	users := r.URL.Query().Get("users")
+	repos := r.URL.Query().Get("repos")
+
+	if boardId == "" || listId == "" || users == "" || repos == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		utils.EncodeJson(w, "Invalid request")
+		return
+	}
+
+	trelloService.SyncCards(listId, strings.Split(users, ","), strings.Split(repos, ",")...)
+	w.Header().Set("Content-Type", "application/json")
+	utils.EncodeJson(w, "Cards synced")
+}
+
 func main() {
 	const PORT = "12769"
 
 	mux := http.NewServeMux()
+	handler := http.HandlerFunc(buildMid(mux))
 
 	mux.HandleFunc("/reviews", func(w http.ResponseWriter, r *http.Request) {
 		// TODO: pass only the repo and name and pr id
@@ -44,6 +81,7 @@ func main() {
 		utils.EncodeJson(w, result)
 	})
 
+	// routes
 	mux.HandleFunc("/pull_requests", getPullRequests)
 	// Go 1.22+ ServeMux: só casa o path exato; barra no final dava 404.
 	mux.HandleFunc("/pull_requests/", func(w http.ResponseWriter, r *http.Request) {
@@ -54,7 +92,8 @@ func main() {
 		getPullRequests(w, r)
 	})
 
-	handler := http.HandlerFunc(buildMid(mux))
+	mux.HandleFunc("/sync_cards", syncCards)
+	// routes end
 
 	log.Println("Servidor rodando em https://localhost:", PORT)
 

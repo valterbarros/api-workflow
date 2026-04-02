@@ -17,7 +17,7 @@ type _pullRequest struct {
 }
 
 type TrelloClientInterface interface {
-	CreateCard(pr github.PullRequest)
+	CreateCard(listId string, pr github.PullRequest)
 	GetLabelId(searches ...string) []string
 }
 
@@ -27,12 +27,13 @@ type TrelloClient struct {
 }
 
 const BASE_URL = "https://api.trello.com/1"
-const DOING_LIST_ID = "623ca78014f837744b044577"
+
+// const DOING_LIST_ID = "623ca78014f837744b044577"
 const BOARD_ID = "623ca78014f837744b044573"
 
 // const TAVOLA_LABEL_ID = "649cdc411b86084babfb4605"
 
-func (t *TrelloClient) CreateCard(pr github.PullRequest) {
+func (t *TrelloClient) CreateCard(listId string, pr github.PullRequest) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("error creating the card", r)
@@ -55,7 +56,7 @@ func (t *TrelloClient) CreateCard(pr github.PullRequest) {
 
 	name := fmt.Sprintf("%s [%s] #%d[%s] [%s] [a: %d]", pullRequest.Title, pullRequest.Base.Repo.Name, pullRequest.Number, pullRequest.User.Login, pullRequest.Updated_at, pullRequest.Additions)
 	data.Set("name", name)
-	data.Set("idList", DOING_LIST_ID)
+	data.Set("idList", listId)
 	data.Set("pos", "top")
 	labels := t.GetLabelId(pullRequest.User.Login, pullRequest.Base.Repo.Name)
 	data.Set("idLabels", strings.Join(labels, ","))

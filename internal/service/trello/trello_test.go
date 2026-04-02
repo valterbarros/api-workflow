@@ -19,7 +19,7 @@ type mockTrelloClient struct {
 	BoardId string
 }
 
-func (m *mockTrelloClient) CreateCard(pr github.PullRequest) {
+func (m *mockTrelloClient) CreateCard(listId string, pr github.PullRequest) {
 	arguments = append(arguments, argm{"title": pr.Title, "url": pr.Url})
 }
 
@@ -28,34 +28,37 @@ func (m *mockTrelloClient) GetLabelId(searches ...string) []string {
 }
 
 var trelloService = TrelloService{
-	storagePath: "tmp/created_prs.txt",
-	trelloClient: &mockTrelloClient{
+	StoragePath: "tmp/created_prs.txt",
+	TrelloClient: &mockTrelloClient{
 		BaseUrl: "",
 		BoardId: "",
 	},
 }
 
-func TestCreatePrCard(t *testing.T) {
+func TestSyncCards(t *testing.T) {
 	t.Run("should create cards", func(t *testing.T) {
+		utils.ResetFile(utils.GetFromRoot(trelloService.StoragePath))
 		arguments = nil
 
 		ser1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			data := utils.GetFileData(utils.GetFromRoot("fixtures/pull-requests.json"))
-			w.Write([]byte(data))
+			data2 := utils.GetFileData(utils.GetFromRoot("fixtures/pull-requests2.json"))
+			switch r.URL.Path {
+			case "/repos/clicksign/app-stamped/pulls":
+				w.Write([]byte(data))
+			case "/repos/clicksign/app-envelope-finalizer-service/pulls":
+				w.Write([]byte(data2))
+			default:
+				t.Errorf("unexpected url: %s", r.URL.Path)
+			}
 		}))
 
 		defer ser1.Close()
 
-		ser2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusOK)
-			data := utils.GetFileData(utils.GetFromRoot("fixtures/pull-requests2.json"))
-			w.Write([]byte(data))
-		}))
+		trelloService.GithubBaseUrl = ser1.URL
 
-		defer ser2.Close()
-
-		trelloService.CreatePrCard([]string{"spinelli-clk"}, ser1.URL, ser2.URL)
+		trelloService.SyncCards("123", []string{"spinelli-clk"}, "app-stamped", "app-envelope-finalizer-service")
 
 		expected := []argm{
 			{
@@ -81,9 +84,9 @@ func TestCreatePrCard(t *testing.T) {
 		}
 	})
 	t.Run("should not create card twice when already has on storage", func(t *testing.T) {
-		utils.ResetFile(utils.GetFromRoot(trelloService.storagePath))
+		utils.ResetFile(utils.GetFromRoot(trelloService.StoragePath))
 		// one pr of fixtures/pull-requests2.json
-		utils.SaveFile(utils.GetFromRoot(trelloService.storagePath), "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls/43\n")
+		utils.SaveFile(utils.GetFromRoot(trelloService.StoragePath), "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls/43\n")
 
 		ser1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
@@ -91,10 +94,12 @@ func TestCreatePrCard(t *testing.T) {
 			w.Write([]byte(data))
 		}))
 
+		trelloService.GithubBaseUrl = ser1.URL
+
 		defer ser1.Close()
 
 		arguments = nil
-		trelloService.CreatePrCard([]string{"spinelli-clk"}, ser1.URL)
+		trelloService.SyncCards("123", []string{"spinelli-clk"}, "app-envelope-finalizer-service")
 		if len(arguments) > 2 {
 			t.Errorf("expected 1 card, got %d", len(arguments))
 		}
@@ -105,8 +110,8 @@ func TestCreatePrCard(t *testing.T) {
 			BoardId: "623ca78014f837744b044573",
 			BaseUrl: "https://api.trello.com/1",
 		}
-		trelloService.trelloClient = &tc
-		trelloService.CreatePrCard([]string{"spinelli-clk"}, "https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls")
+		trelloService.TrelloClient = &tc
+		trelloService.SyncCards("123", []string{"spinelli-clk"}, "app-stamped", "app-envelope-finalizer-service")
 
 		t.Error("not implemented")
 	})
