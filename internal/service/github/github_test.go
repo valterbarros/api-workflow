@@ -59,7 +59,7 @@ func TestReviewsResult(t *testing.T) {
 			t.Error("not equal color")
 		}
 
-		if result.Text != "CO: 15 AP: 1 ME: DI" {
+		if result.Text != "CO: 16 AP: 1 ME: DI" {
 			t.Error("not equal review data", result.Text)
 		}
 	})

@@ -4,7 +4,6 @@ import (
 	client "api-workflow/internal/client/github"
 	"fmt"
 	"regexp"
-	"slices"
 	"strings"
 )
 
@@ -85,7 +84,6 @@ const MYUSER = "valter-clk"
 func ReviewsResult(url string) ReviewData {
 	reviews := client.GetReviews(url)
 
-	slices.Reverse(reviews)
 	var approveCount int
 	var meType string
 	mapper := map[string]int{}
