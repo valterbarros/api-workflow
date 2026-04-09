@@ -16,6 +16,7 @@ type PullRequest struct {
 	Draft      bool             `json:"draft"`
 	Number     int              `json:"number"`
 	Html_url   string           `json:"html_url"`
+	State      string           `json:"state"`
 	Links      struct {
 		Self struct {
 			Href string `json:"href"`
