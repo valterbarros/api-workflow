@@ -46,3 +46,7 @@ https://api.github.com/repos/clicksign/excalibur/pulls/917
 https://api.github.com/repos/clicksign/tavola/pulls/14893
 https://api.github.com/repos/clicksign/app-workspaces/pulls/167
 https://api.github.com/repos/clicksign/app-workspaces/pulls/169
+https://api.github.com/repos/clicksign/tavola/pulls/14922
+https://api.github.com/repos/clicksign/tavola/pulls/14914
+https://api.github.com/repos/clicksign/excalibur/pulls/1127
+https://api.github.com/repos/clicksign/app-workspaces/pulls/171

@@ -7,7 +7,10 @@ import (
 	"api-workflow/utils"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 )
 
 func buildMid(mux *http.ServeMux) func(w http.ResponseWriter, r *http.Request) {
@@ -69,6 +72,15 @@ func syncCards(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	const PORT = "12769"
+
+	signals := make(chan os.Signal, 1)
+	// closes server on siging -9
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		<-signals
+		log.Println("Shutting down server...")
+		os.Exit(0)
+	}()
 
 	mux := http.NewServeMux()
 	handler := http.HandlerFunc(buildMid(mux))

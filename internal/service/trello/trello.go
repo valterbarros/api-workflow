@@ -33,7 +33,7 @@ func (t *TrelloService) SyncCards(listId string, users []string, reposNames ...s
 		pulls := github.GetPullRequests(t.urlFromRepo(repo))
 		// filters
 		pulls = slices.DeleteFunc(pulls, func(p github.PullRequest) bool {
-			return !slices.Contains(usersFilter, p.User.Login) || strings.Contains(createdPrs, p.Url) || p.State != "OPEN"
+			return !slices.Contains(usersFilter, p.User.Login) || strings.Contains(createdPrs, p.Url) || p.Draft
 		})
 		merged = append(merged, pulls...)
 	}

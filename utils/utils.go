@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func GetFromRoot(path string) string {
@@ -44,6 +45,13 @@ func GetFileData(file string) string {
 	}
 
 	return string(data)
+}
+
+func WriteLog(line string) {
+	file := "/tmp/go-api-log.txt"
+	data := GetFileData(file)
+	data += time.Now().Format("2006-01-02 15:04:05") + " " + line + "\n"
+	SaveFile(file, data)
 }
 
 func Capitalize(s string) string {
