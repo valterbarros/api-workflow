@@ -18,7 +18,7 @@ type TrelloService struct {
 func (t *TrelloService) SyncCards(listId string, users []string, reposNames ...string) {
 	// List all prs from all repos selecteds
 	// For each create a new trello card with title = gh title
-	// TODO: comes from request
+	// comes from request
 	// repos := []string{"tavola", "app-workspace", "nova-widget"}
 	// pulls := []github.PullRequests{}
 	// skipPrNames := "val, test"
