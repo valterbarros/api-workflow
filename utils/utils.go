@@ -11,7 +11,8 @@ import (
 )
 
 func GetFromRoot(path string) string {
-	var Root, _ = filepath.Abs(os.Getenv("HOME") + "/workspace/api-workflow")
+	// TODO: make this dynamic
+	var Root, _ = filepath.Abs(os.Getenv("HOME") + "/Projects/go/api-workflow")
 
 	return filepath.Join(Root, path)
 }
