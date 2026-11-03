@@ -36,8 +36,6 @@ const BASE_URL = "https://api.trello.com/1"
 // const DOING_LIST_ID = "623ca78014f837744b044577"
 const BOARD_ID = "623ca78014f837744b044573"
 
-// const TAVOLA_LABEL_ID = "649cdc411b86084babfb4605"
-
 func (t *TrelloClient) CreateCard(listId string, pr github.PullRequest) {
 	defer func() {
 		if r := recover(); r != nil {

@@ -37,7 +37,7 @@ func getPullRequests(w http.ResponseWriter, r *http.Request) {
 	utils.EncodeJson(w, items)
 }
 
-// url: /sync_cards?listId=623ca78014f837744b044577&users=spinelli-clk&repos=https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls
+// url: /sync_cards?listId=623ca78014f837744b044577&users=joaozinho&repos=https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls
 func syncCards(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -93,9 +93,7 @@ func main() {
 		utils.EncodeJson(w, result)
 	})
 
-	// routes
 	mux.HandleFunc("/pull_requests", getPullRequests)
-	// Go 1.22+ ServeMux: só casa o path exato; barra no final dava 404.
 	mux.HandleFunc("/pull_requests/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/pull_requests/" {
 			http.NotFound(w, r)
@@ -105,12 +103,9 @@ func main() {
 	})
 
 	mux.HandleFunc("/sync_cards", syncCards)
-	// routes end
 
 	log.Println("Servidor rodando em https://localhost:", PORT)
 
-	// Usando o seu ListenAndServeTLS
-	// Certifique-se de que os caminhos para .crt e .key estão corretos
 	err := http.ListenAndServeTLS(":"+PORT, utils.GetFromRoot("certs/localhost+3.pem"), utils.GetFromRoot("certs/localhost+3-key.pem"), handler)
 	if err != nil {
 		log.Fatal("Erro ao iniciar servidor: ", err)
