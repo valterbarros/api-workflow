@@ -37,7 +37,7 @@ type PullRequest struct {
 func GetPullRequest(url string) PullRequest {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
-	currentUrl := "https://api.github.com/repos/clicksign/app-workspaces/pulls/162"
+	currentUrl := "https://api.github.com/repos/example/app-workspaces/pulls/162"
 
 	if url != "" {
 		currentUrl = url
@@ -81,7 +81,7 @@ type Reviews []User
 func GetReviews(url string) Reviews {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
-	currentUrl := "https://api.github.com/repos/clicksign/tavola/pulls/14781/reviews"
+	currentUrl := "https://api.github.com/repos/example/tavola/pulls/14781/reviews"
 
 	if url != "" {
 		currentUrl = url
@@ -150,7 +150,7 @@ type PullRequests []PullRequest
 func GetPullRequests(url string) PullRequests {
 	utils.SetEnvFromFile()
 	client := &http.Client{}
-	currentUrl := "https://api.github.com/repos/clicksign/tavola/pulls"
+	currentUrl := "https://api.github.com/repos/example/tavola/pulls"
 
 	if url != "" {
 		currentUrl = url

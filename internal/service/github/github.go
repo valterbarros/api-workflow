@@ -79,7 +79,7 @@ type ReviewData struct {
 	Color string `json:"color"`
 }
 
-const MYUSER = "valter-clk"
+const MYUSER = "valter-example"
 
 func ReviewsResult(url string) ReviewData {
 	reviews := client.GetReviews(url)

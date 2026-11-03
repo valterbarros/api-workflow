@@ -37,7 +37,7 @@ func getPullRequests(w http.ResponseWriter, r *http.Request) {
 	utils.EncodeJson(w, items)
 }
 
-// url: /sync_cards?listId=623ca78014f837744b044577&users=joaozinho&repos=https://api.github.com/repos/clicksign/app-envelope-finalizer-service/pulls
+// url: /sync_cards?listId=623ca78014f837744b044577&users=joaozinho&repos=https://api.github.com/repos/example/app-envelope-finalizer-service/pulls
 func syncCards(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
