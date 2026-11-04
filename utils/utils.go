@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -73,7 +74,7 @@ func DecodeJson(data io.Reader, variable any) error {
 	decoder := json.NewDecoder(data)
 
 	if err := decoder.Decode(&variable); err != nil {
-		log.Fatal(err)
+		fmt.Println("fatal inside decode json:", err)
 		return err
 	}
 
@@ -84,7 +85,7 @@ func EncodeJson(data io.Writer, variable any) error {
 	decoder := json.NewEncoder(data)
 
 	if err := decoder.Encode(&variable); err != nil {
-		log.Fatal(err)
+		fmt.Println("fatal inside encode json:", err)
 		return err
 	}
 

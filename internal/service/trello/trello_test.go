@@ -58,7 +58,7 @@ func TestSyncCards(t *testing.T) {
 
 		trelloService.GithubBaseUrl = ser1.URL
 
-		trelloService.SyncCards("123", []string{"spinelli-example"}, "app-stamped", "app-envelope-finalizer-service")
+		trelloService.SyncCards("123", []string{"spinelli-example"}, "example/app-stamped", "example/app-envelope-finalizer-service")
 
 		expected := []argm{
 			{
@@ -80,7 +80,7 @@ func TestSyncCards(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(expected, arguments) {
-			t.Errorf("not equal expected: %s arguments %s", expected, arguments)
+			t.Errorf("not equal expected(%d): %s arguments(%d) %s", len(expected), expected, len(arguments), arguments)
 		}
 	})
 	t.Run("should not create card twice when already has on storage", func(t *testing.T) {
