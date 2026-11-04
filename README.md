@@ -1,6 +1,6 @@
 ### The repo
 
-This is a repo to run some integrations between github and trello
+This is a repo to run some integrations between github and trello, basically it creates an api to be consume by that trello power up https://github.com/valterbarros/trello-automation-power-up/blob/master/README.md
 
 example
 
