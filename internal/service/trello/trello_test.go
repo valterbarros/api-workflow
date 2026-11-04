@@ -100,12 +100,13 @@ func TestSyncCards(t *testing.T) {
 
 		arguments = nil
 		trelloService.SyncCards("123", []string{"spinelli-example"}, "app-envelope-finalizer-service")
-		if len(arguments) > 2 {
+		if len(arguments) != 2 {
 			t.Errorf("expected 1 card, got %d", len(arguments))
 		}
 	})
 	t.Run("should create real cards", func(t *testing.T) {
-		// real test
+		// real hit api test
+		t.Skip()
 		var tc = trello.TrelloClient{
 			BoardId: "623ca78014f837744b044573",
 			BaseUrl: "https://api.trello.com/1",
